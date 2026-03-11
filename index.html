@@ -66,29 +66,80 @@
         </div>
     </section>
 
-    <!-- ==================== STAGE 1: SECRET QUESTION ==================== -->
+    <!-- ==================== STAGE 1: THE ULTIMATE FAN QUIZ ==================== -->
     <section class="stage" id="stage-1">
         <div class="stage-content">
             <div class="stage-header">
                 <span class="stage-number" style="font-family:'Press Start 2P'; font-size:12px; color:var(--accent-gold);">LEVEL 1-1</span>
-                <h2 class="stage-title">The Secret Password</h2>
-                <p class="stage-desc">Enter the correct passphrase to unlock Memory #1...</p>
+                <h2 class="stage-title">The Ultimate Fan Quiz</h2>
+                <p class="stage-desc">Prove you are a true fan to unlock Memory #1 (Need 4/5 correct)</p>
             </div>
 
             <div class="puzzle-card pixel-box">
-                <div class="question-icon" style="font-size:40px; margin-bottom:10px;">🔐</div>
-                <!-- ✏️ CUSTOMIZE: Change the question below -->
-                <p class="question-text" id="q1-question" style="font-size:24px; color:var(--text-dark);">Where did we go on our first date?</p>
-                
-                <div class="input-group">
-                    <input type="text" id="q1-answer" class="pix-input" placeholder="Type here..." autocomplete="off">
-                    <br>
-                    <button class="btn-pixel" onclick="checkAnswer()">
-                        UNLOCK
-                    </button>
+                <div class="quiz-container" id="quiz-container">
+                    
+                    <!-- Q1 -->
+                    <div class="quiz-question active" id="q1">
+                        <p class="question-text">📺 The Rookie:<br>Come si chiama la ship Tim Bradford + Lucy Chen?</p>
+                        <div class="quiz-options">
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(1, 'Timberly')">Timberly</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(1, 'Chenford')">Chenford</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(1, 'Bradchen')">Bradchen</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(1, 'TiLu')">TiLu</button>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="quiz-question hidden" id="q2">
+                        <p class="question-text">🛡️ Vikings:<br>Come muore Ragnar Lothbrok?</p>
+                        <div class="quiz-options">
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(2, 'Battaglia')">In battaglia</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(2, 'Veleno')">Avvelenato</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(2, 'Serpenti')">Fossa di serpenti</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(2, 'Mare')">Annegato</button>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="quiz-question hidden" id="q3">
+                        <p class="question-text">🦑 Squid Game:<br>Qual è la forma più difficile del Dalgona?</p>
+                        <div class="quiz-options">
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(3, 'Cerchio')">Cerchio</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(3, 'Triangolo')">Triangolo</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(3, 'Stella')">Stella</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(3, 'Ombrello')">Ombrello</button>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="quiz-question hidden" id="q4">
+                        <p class="question-text">👑 Bridgerton:<br>Chi è la coppia protagonista della Stagione 3?</p>
+                        <div class="quiz-options">
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(4, 'Daphne')">Daphne & Simon</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(4, 'Anthony')">Anthony & Kate</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(4, 'Colin')">Colin & Penelope</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(4, 'Benedict')">Benedict & Sophie</button>
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="quiz-question hidden" id="q5">
+                        <p class="question-text">💼 Mr. Plankton:<br>Perché Hae Jo "rapisce" Jae-mi?</p>
+                        <div class="quiz-options">
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(5, 'Vendetta')">Per vendetta</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(5, 'Padre')">Cercare il padre</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(5, 'Matrimonio')">Fermare le nozze</button>
+                            <button class="btn-pixel quiz-opt" onclick="selectQuizAnswer(5, 'Polizia')">Scappare</button>
+                        </div>
+                    </div>
+
                 </div>
-                <p class="hint-text" id="q1-hint" style="color:red; font-weight:bold;"></p>
-                <!-- ✏️ CUSTOMIZE: Change the correct answer in puzzles.js (ANSWER_1 variable) -->
+
+                <div class="quiz-progress" style="margin-top:20px; font-size:16px;">
+                    Question <span id="quiz-current-q">1</span> of 5
+                </div>
+
+                <p class="hint-text" id="quiz-hint" style="color:red; font-weight:bold;"></p>
             </div>
 
             <div class="reward-container hidden" id="reward-1">
@@ -97,7 +148,7 @@
                     <img src="https://via.placeholder.com/250" alt="Our memory" class="reward-photo" id="reward-photo-1">
                 </div>
                 <!-- ✏️ CUSTOMIZE: Change the message below -->
-                <p class="reward-message" id="reward-msg-1">This is where it all began... the start of something beautiful. 💕</p>
+                <p class="reward-message" id="reward-msg-1">You know your shows, but you know my heart even better. 💕</p>
                 <button class="btn-pixel gold" onclick="goToStage(2)">
                     NEXT LEVEL ►
                 </button>
@@ -176,7 +227,7 @@
 
             <div class="puzzle-card pixel-box">
                 <div class="scratch-container" id="scratch-wrapper">
-                    <!-- ✏️ CUSTOMIZE: Replace with your photo -->
+                    <!-- ✏️ CUSTOMIZE: Replace with Harry Styles / 1D photo -->
                     <img src="https://via.placeholder.com/300" alt="Hidden memory" class="scratch-reveal" id="scratch-reveal">
                     <canvas id="scratch-canvas"></canvas>
                 </div>
@@ -184,7 +235,7 @@
             </div>
 
             <div class="reward-container hidden" id="reward-4">
-                <p class="reward-message" id="reward-msg-4">Beneath every layer, there's always more love to discover. 🎴💕</p>
+                <p class="reward-message" id="reward-msg-4">We can "Dance No More", but I will never stop loving you. 🎴💕</p>
                 <button class="btn-pixel gold" onclick="goToStage(5)">
                     BOSS LEVEL ►
                 </button>
@@ -207,10 +258,11 @@
             </div>
 
             <div class="finale-message pixel-box">
-                <!-- ✏️ CUSTOMIZE: Add your final dedication below -->
+                <!-- ✏️ CUSTOMIZE: Final dedication message -->
                 <p class="dedication-text" id="dedication-text" style="font-size:28px; line-height:1.4;">
-                    Your final dedication message goes here. Make it special, make it from the heart. 
-                    She deserves the world and more. Happy 22nd birthday, my love! 🎂💕
+                    From "Story of My Life" to "Sign of the Times", I love you more every day. 
+                    And if you didn't smile at least once playing this... that's some white shit. 😂
+                    <br><br>Happy 22nd birthday, my love! 🎂💕
                 </p>
                 <p class="dedication-signature" style="text-align:right; margin-top:20px; color:var(--primary-rose);">— Player 1 ❤️</p>
             </div>
@@ -223,10 +275,14 @@
         </div>
     </section>
 
-    <!-- Audio (optional) -->
+    <!-- Audio Player -->
     <button class="audio-toggle" id="audio-toggle" onclick="toggleAudio()" title="Toggle music">
         🔇
     </button>
+    <audio id="bg-music" loop>
+        <!-- ✏️ CUSTOMIZE: Place an 8-bit harry styles mp3 in the sounds folder and update path -->
+        <source src="sounds/harry_styles_8bit.mp3" type="audio/mpeg">
+    </audio>
 
     <script src="js/countdown.js"></script>
     <script src="js/confetti.js"></script>

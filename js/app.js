@@ -23,10 +23,31 @@ function startAdventure() {
     document.getElementById('progress-container').style.display = 'block';
     goToStage(1);
     
-    // Attempt to play audio if added later 
-    // (browsers require user interaction first, so this is the perfect place)
-    // const bgMusic = document.getElementById('bg-music');
-    // if(bgMusic) bgMusic.play();
+    // Play audio
+    const bgMusic = document.getElementById('bg-music');
+    if(bgMusic && !bgMusic.playing) {
+        bgMusic.play().catch(e => console.log("Audio autoplay prevented by browser. User must click play."));
+        bgMusic.playing = true;
+        document.getElementById('audio-toggle').innerText = '🔊';
+    }
+}
+
+// Toggle Background Music
+function toggleAudio() {
+    const bgMusic = document.getElementById('bg-music');
+    const toggleBtn = document.getElementById('audio-toggle');
+    
+    if(!bgMusic) return;
+    
+    if (bgMusic.paused) {
+        bgMusic.play();
+        bgMusic.playing = true;
+        toggleBtn.innerText = '🔊';
+    } else {
+        bgMusic.pause();
+        bgMusic.playing = false;
+        toggleBtn.innerText = '🔇';
+    }
 }
 
 // Navigate between stages

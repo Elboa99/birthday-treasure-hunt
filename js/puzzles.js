@@ -3,31 +3,85 @@
    ========================================================================= */
 
 // =========================================================================
-// STAGE 1: PASSWORD RIDDLE
+// STAGE 1: THE ULTIMATE FAN QUIZ
 // =========================================================================
-const ANSWER_1 = "your answer here"; // ✏️ CUSTOMIZE: Set the correct answer (will be checked case-insensitive)
-const ANSWER_HINT = "Hint: It was somewhere near the park.";
+const QUIZ_ANSWERS = {
+    1: "Chenford",
+    2: "Serpenti",
+    3: "Ombrello",
+    4: "Colin",
+    5: "Padre"
+};
 
-function checkAnswer() {
-    const input = document.getElementById('q1-answer');
-    const hintText = document.getElementById('q1-hint');
-    const puzzleCard = input.parentElement.parentElement;
+let currentQuestion = 1;
+let score = 0;
+let consecutiveFails = 0;
+
+function selectQuizAnswer(qIndex, selectedAnswer) {
+    const hintText = document.getElementById('quiz-hint');
+    const puzzleCard = document.querySelector('#stage-1 .puzzle-card');
     
-    // Clean input (lowercase, trim spaces)
-    const userAnswer = input.value.toLowerCase().trim();
-    // Allow partial matches or specific keywords to be flexible
-    if (userAnswer === ANSWER_1.toLowerCase() || userAnswer === "test") { 
+    if (selectedAnswer === QUIZ_ANSWERS[qIndex]) {
         // Correct!
-        puzzleCard.classList.add('hidden');
-        revealReward(1);
+        score++;
+        consecutiveFails = 0;
+        hintText.innerText = "Correct! ✅";
+        hintText.style.color = "green";
+        advanceQuiz();
     } else {
-        // Wrong! Shake animation
+        // Wrong
+        consecutiveFails++;
         puzzleCard.classList.remove('shake');
-        void puzzleCard.offsetWidth; // Trigger reflow
+        void puzzleCard.offsetWidth; // reflow
         puzzleCard.classList.add('shake');
-        hintText.innerText = ANSWER_HINT;
-        input.value = '';
+        
+        if(consecutiveFails >= 2) {
+            hintText.innerText = "That's some white shit. 😂";
+        } else {
+            hintText.innerText = "Wrong! Try again ❌";
+        }
+        hintText.style.color = "red";
     }
+}
+
+function advanceQuiz() {
+    setTimeout(() => {
+        // Hide current
+        document.getElementById(`q${currentQuestion}`).classList.remove('active');
+        document.getElementById(`q${currentQuestion}`).classList.add('hidden');
+        
+        currentQuestion++;
+        const hintText = document.getElementById('quiz-hint');
+        hintText.innerText = "";
+        
+        if(currentQuestion <= 5) {
+            // Show next
+            document.getElementById(`q${currentQuestion}`).classList.remove('hidden');
+            document.getElementById(`q${currentQuestion}`).classList.add('active');
+            document.getElementById('quiz-current-q').innerText = currentQuestion;
+        } else {
+            // Quiz finished! Check score
+            const puzzleCard = document.querySelector('#stage-1 .puzzle-card');
+            puzzleCard.classList.add('hidden');
+            
+            const rewardMsg = document.getElementById('reward-msg-1');
+            if(score >= 4) {
+                rewardMsg.innerText = `You got ${score}/5! You know your shows, but you know my heart even better. 💕`;
+                revealReward(1);
+            } else {
+                // Failed the whole quiz, let them restart
+                score = 0;
+                currentQuestion = 1;
+                consecutiveFails = 0;
+                puzzleCard.classList.remove('hidden');
+                document.getElementById('q1').classList.remove('hidden');
+                document.getElementById('q1').classList.add('active');
+                document.getElementById('quiz-current-q').innerText = "1";
+                hintText.innerText = `You only got ${score}/5. That's some white shit. Try again!`;
+                hintText.style.color = "red";
+            }
+        }
+    }, 800);
 }
 
 // =========================================================================
@@ -146,8 +200,8 @@ let firstCard, secondCard;
 let moves = 0;
 let pairsFound = 0;
 
-// Emojis for the retroactive memory cards (in pairs)
-const memoryIcons = ['❤️', '🎮', '🍕', '✈️', '📸', '🎸'];
+// Custom emojis representing her interests (Gym, Harry Styles, Bridgerton, Squid Game, Pepper, scopare)
+const memoryIcons = ['🏋️‍♀️', '🍉', '👑', '🦑', '🐕', '🛏️'];
 
 function initMemory() {
     if(!memoryGrid) return;
