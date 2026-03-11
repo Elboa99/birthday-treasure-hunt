@@ -1,0 +1,394 @@
+/* =========================================================================
+   22 CLUES FOR YOU - Birthday Treasure Hunt
+   Theme: Retro 2D Pixel Art (Rose/Pink Palette)
+   ========================================================================= */
+
+/* --- Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+/* --- CSS Variables --- */
+:root {
+    /* Color Palette */
+    --bg-dark: #1a0a12;
+    --bg-light: #FFD1DC;
+    --primary-rose: #BA4A76;
+    --secondary-pink: #E8A0BF;
+    --accent-gold: #D4AF37;
+    --text-light: #FFF5F7;
+    --text-dark: #2d131f;
+    
+    /* Pixel Border Helper */
+    --pixel-border: 
+        -4px 0 0 0 var(--text-dark),
+        4px 0 0 0 var(--text-dark),
+        0 -4px 0 0 var(--text-dark),
+        0 4px 0 0 var(--text-dark);
+}
+
+/* --- Global Reset & Base Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    line-height: 1.5;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* subtle pixel grid background */
+    background-image: 
+        linear-gradient(rgba(186, 74, 118, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(186, 74, 118, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+h1, h2, h3 {
+    font-family: 'Press Start 2P', cursive;
+    text-transform: uppercase;
+    line-height: 1.3;
+}
+
+button {
+    font-family: 'Press Start 2P', cursive;
+    cursor: pointer;
+}
+
+/* --- Utility Classes --- */
+.hidden {
+    display: none !important;
+}
+
+/* --- Pixel Art Containers --- */
+.pixel-box {
+    background-color: var(--secondary-pink);
+    color: var(--text-dark);
+    padding: 24px;
+    margin: 20px auto;
+    position: relative;
+    max-width: 600px;
+    width: 90%;
+    
+    /* Pixel shadow/border effect */
+    box-shadow: 
+        -4px 0 0 0 var(--text-dark),
+        4px 0 0 0 var(--text-dark),
+        0 -4px 0 0 var(--text-dark),
+        0 4px 0 0 var(--text-dark),
+        -8px 8px 0 0 rgba(0,0,0,0.5); /* Retro drop shadow */
+}
+
+/* Add inner light border for 3D pixel effect */
+.pixel-box::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border-top: 4px solid #fff;
+    border-left: 4px solid #fff;
+    border-bottom: 4px solid rgba(0,0,0,0.2);
+    border-right: 4px solid rgba(0,0,0,0.2);
+    pointer-events: none;
+}
+
+/* --- Buttons (Pixel Art Style) --- */
+.btn-pixel {
+    background-color: var(--primary-rose);
+    color: var(--text-light);
+    border: none;
+    padding: 16px 24px;
+    font-size: 14px; /* Press Start is very wide */
+    text-align: center;
+    position: relative;
+    margin: 10px;
+    text-transform: uppercase;
+    
+    /* Box shadow to create pixel border */
+    box-shadow: 
+        inset -4px -4px 0px 0px rgba(0,0,0,0.3), /* inner shadow down-right */
+        inset 4px 4px 0px 0px rgba(255,255,255,0.4), /* inner highlight up-left */
+        -4px 0 0 0 var(--text-dark),
+        4px 0 0 0 var(--text-dark),
+        0 -4px 0 0 var(--text-dark),
+        0 4px 0 0 var(--text-dark),
+        0 8px 0 0 rgba(0,0,0,0.3); /* outer drop shadow */
+    
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-pixel:hover {
+    background-color: #d15687; /* Slightly lighter rose */
+}
+
+.btn-pixel:active {
+    transform: translateY(4px);
+    box-shadow: 
+        inset 4px 4px 0px 0px rgba(0,0,0,0.3), /* flip inner shadow when pressed */
+        -4px 0 0 0 var(--text-dark),
+        4px 0 0 0 var(--text-dark),
+        0 -4px 0 0 var(--text-dark),
+        0 4px 0 0 var(--text-dark),
+        0 4px 0 0 rgba(0,0,0,0.3); /* reduced outer shadow */
+}
+
+/* Accent button (Gold) */
+.btn-pixel.gold {
+    background-color: var(--accent-gold);
+    color: var(--text-dark);
+}
+.btn-pixel.gold:hover {
+    background-color: #e6c245;
+}
+
+/* --- Stage Management --- */
+.stage {
+    display: none;
+    flex: 1;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    min-height: 100vh;
+}
+
+.stage.active {
+    display: flex;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* --- Progress Bar (Pixel Hearts) --- */
+.progress-container {
+    padding: 20px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    background-color: rgba(26, 10, 18, 0.9);
+    border-bottom: 4px solid var(--primary-rose);
+}
+
+.pixel-heart {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 0 5px;
+    background-color: #333; /* Empty state */
+    /* Pixel heart shape via clip-path or background image */
+    clip-path: polygon(10% 30%, 30% 10%, 50% 30%, 70% 10%, 90% 30%, 90% 50%, 50% 90%, 10% 50%);
+    opacity: 0.5;
+    transition: all 0.3s;
+}
+
+.pixel-heart.filled {
+    background-color: var(--primary-rose);
+    opacity: 1;
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+/* --- Stage Content Layout --- */
+.stage-content {
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+    margin-top: 60px; /* Account for fixed progress bar */
+}
+
+/* --- Landing Page specific --- */
+.landing-title {
+    font-size: 40px;
+    color: var(--accent-gold);
+    text-shadow: 4px 4px 0 var(--primary-rose);
+    margin-bottom: 20px;
+    letter-spacing: -2px;
+}
+
+.landing-subtitle {
+    font-size: 28px;
+    color: var(--secondary-pink);
+    margin-bottom: 40px;
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0 50px;
+}
+
+.countdown-unit {
+    background-color: var(--text-dark);
+    color: var(--text-light);
+    padding: 15px;
+    min-width: 90px;
+    box-shadow: 4px 4px 0 var(--primary-rose);
+}
+
+.countdown-number {
+    display: block;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 32px;
+    color: var(--accent-gold);
+    margin-bottom: 5px;
+}
+
+/* --- Puzzle Elements --- */
+.stage-title {
+    color: var(--primary-rose);
+    text-shadow: 2px 2px 0 var(--text-dark);
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.pix-input {
+    font-family: 'VT323', monospace;
+    font-size: 28px;
+    padding: 10px;
+    width: 80%;
+    margin: 20px 0;
+    background: #fff;
+    border: none;
+    color: var(--text-dark);
+    box-shadow: 
+        -4px 0 0 0 var(--text-dark),
+        4px 0 0 0 var(--text-dark),
+        0 -4px 0 0 var(--text-dark),
+        0 4px 0 0 var(--text-dark),
+        inset 4px 4px 0 rgba(0,0,0,0.1);
+    outline: none;
+}
+.pix-input::placeholder {
+    color: #999;
+}
+
+/* Reward Photo Frame (Pixel polaroid) */
+.reward-photo-frame {
+    background: white;
+    padding: 12px 12px 40px 12px;
+    margin: 20px auto;
+    max-width: 300px;
+    box-shadow: 
+        -4px 0 0 0 var(--text-dark),
+        4px 0 0 0 var(--text-dark),
+        0 -4px 0 0 var(--text-dark),
+        0 4px 0 0 var(--text-dark),
+        8px 8px 0 rgba(0,0,0,0.5);
+    transform: rotate(-2deg);
+}
+
+.reward-photo {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* Optional: make photos slightly pixelated */
+    image-rendering: pixelated;
+}
+
+.reward-message {
+    color: var(--text-dark);
+    font-size: 32px; /* VT323 needs to be large */
+    line-height: 1.2;
+    margin: 20px 0;
+}
+
+/* --- Jigsaw & Memory Grids --- */
+.grid-container {
+    display: grid;
+    gap: 4px;
+    margin: 20px auto;
+    background: var(--text-dark);
+    padding: 4px;
+}
+.grid-3x3 {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 300px;
+}
+.grid-4x3 {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 400px;
+}
+
+/* Memory Card */
+.memory-card {
+    aspect-ratio: 1;
+    background-color: var(--primary-rose);
+    box-shadow: inset -4px -4px 0px rgba(0,0,0,0.2), inset 4px 4px 0px rgba(255,255,255,0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+    font-size: 24px;
+}
+.memory-card.flipped {
+    background-color: white;
+    box-shadow: inset 4px 4px 0px rgba(0,0,0,0.1);
+}
+
+/* --- Scratch Canvas --- */
+.scratch-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    border: 4px solid var(--text-dark);
+    background: #000;
+}
+#scratch-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    cursor: crosshair;
+}
+.scratch-reveal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    object-fit: cover;
+}
+
+/* Error/Shake Animation */
+.shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+@keyframes shake {
+    10%, 90% { transform: translate3d(-4px, 0, 0); }
+    20%, 80% { transform: translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+    40%, 60% { transform: translate3d(8px, 0, 0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .landing-title { font-size: 28px; }
+    h1, h2 { font-size: 16px; }
+    .countdown-unit { min-width: 70px; padding: 10px; }
+    .countdown-number { font-size: 24px; }
+    .countdown-text { font-size: 18px; }
+}

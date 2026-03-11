@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22 Clues for You 💕</title>
+    <meta name="description" content="A special interactive treasure hunt for an amazing 22nd birthday">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts-bg" id="hearts-bg"></div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container" id="progress-container">
+        <div class="pixel-heart active" data-step="0"></div>
+        <div class="pixel-heart" data-step="1"></div>
+        <div class="pixel-heart" data-step="2"></div>
+        <div class="pixel-heart" data-step="3"></div>
+        <div class="pixel-heart" data-step="4"></div>
+        <div class="pixel-heart" data-step="5"></div>
+    </div>
+
+    <!-- ==================== LANDING PAGE ==================== -->
+    <section class="stage active" id="stage-landing">
+        <div class="landing-content">
+            <div class="sparkle-container">
+                <h1 class="landing-title">
+                    <span class="title-line">22 Clues</span>
+                    <span class="title-line accent">for You</span>
+                </h1>
+            </div>
+            <p class="landing-subtitle">A treasure hunt through our memories</p>
+            
+            <div class="countdown-container" id="countdown-container">
+                <p class="countdown-label">Your special day arrives in:</p>
+                <div class="countdown" id="countdown">
+                    <div class="countdown-unit">
+                        <span class="countdown-number" id="cd-days">00</span>
+                        <span class="countdown-text">Days</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-unit">
+                        <span class="countdown-number" id="cd-hours">00</span>
+                        <span class="countdown-text">Hours</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-unit">
+                        <span class="countdown-number" id="cd-minutes">00</span>
+                        <span class="countdown-text">Minutes</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-unit">
+                        <span class="countdown-number" id="cd-seconds">00</span>
+                        <span class="countdown-text">Seconds</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-pixel gold" id="btn-start" onclick="startAdventure()">
+                PRESS START ►
+            </button>
+        </div>
+    </section>
+
+    <!-- ==================== STAGE 1: SECRET QUESTION ==================== -->
+    <section class="stage" id="stage-1">
+        <div class="stage-content">
+            <div class="stage-header">
+                <span class="stage-number" style="font-family:'Press Start 2P'; font-size:12px; color:var(--accent-gold);">LEVEL 1-1</span>
+                <h2 class="stage-title">The Secret Password</h2>
+                <p class="stage-desc">Enter the correct passphrase to unlock Memory #1...</p>
+            </div>
+
+            <div class="puzzle-card pixel-box">
+                <div class="question-icon" style="font-size:40px; margin-bottom:10px;">🔐</div>
+                <!-- ✏️ CUSTOMIZE: Change the question below -->
+                <p class="question-text" id="q1-question" style="font-size:24px; color:var(--text-dark);">Where did we go on our first date?</p>
+                
+                <div class="input-group">
+                    <input type="text" id="q1-answer" class="pix-input" placeholder="Type here..." autocomplete="off">
+                    <br>
+                    <button class="btn-pixel" onclick="checkAnswer()">
+                        UNLOCK
+                    </button>
+                </div>
+                <p class="hint-text" id="q1-hint" style="color:red; font-weight:bold;"></p>
+                <!-- ✏️ CUSTOMIZE: Change the correct answer in puzzles.js (ANSWER_1 variable) -->
+            </div>
+
+            <div class="reward-container hidden" id="reward-1">
+                <div class="reward-photo-frame">
+                    <!-- ✏️ CUSTOMIZE: Replace with your photo -->
+                    <img src="https://via.placeholder.com/250" alt="Our memory" class="reward-photo" id="reward-photo-1">
+                </div>
+                <!-- ✏️ CUSTOMIZE: Change the message below -->
+                <p class="reward-message" id="reward-msg-1">This is where it all began... the start of something beautiful. 💕</p>
+                <button class="btn-pixel gold" onclick="goToStage(2)">
+                    NEXT LEVEL ►
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== STAGE 2: JIGSAW PUZZLE ==================== -->
+    <section class="stage" id="stage-2">
+        <div class="stage-content">
+            <div class="stage-header">
+                <span class="stage-number" style="font-family:'Press Start 2P'; font-size:12px; color:var(--accent-gold);">LEVEL 1-2</span>
+                <h2 class="stage-title">Piece It Together</h2>
+                <p class="stage-desc">Drag the blocks to rebuild this special photo...</p>
+            </div>
+
+            <div class="puzzle-card pixel-box">
+                <div class="jigsaw-container grid-container grid-3x3" id="jigsaw-container">
+                    <!-- Jigsaw grid generated by JS -->
+                </div>
+                <p class="jigsaw-hint" style="color:var(--text-dark);">Drag and drop pieces into the correct positions</p>
+            </div>
+
+            <div class="reward-container hidden" id="reward-2">
+                <div class="reward-photo-frame">
+                    <!-- ✏️ CUSTOMIZE: This shows the complete jigsaw photo -->
+                    <img src="https://via.placeholder.com/250" alt="Our memory" class="reward-photo" id="reward-photo-2">
+                </div>
+                <p class="reward-message" id="reward-msg-2">Every piece of my life is better with you in it. 🧩💕</p>
+                <button class="btn-pixel gold" onclick="goToStage(3)">
+                    NEXT LEVEL ►
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== STAGE 3: MEMORY MATCH ==================== -->
+    <section class="stage" id="stage-3">
+        <div class="stage-content">
+            <div class="stage-header">
+                <span class="stage-number" style="font-family:'Press Start 2P'; font-size:12px; color:var(--accent-gold);">LEVEL 1-3</span>
+                <h2 class="stage-title">Match Our Memories</h2>
+                <p class="stage-desc">Find all matching pairs to reveal the hidden message...</p>
+            </div>
+
+            <div class="puzzle-card pixel-box">
+                <div class="memory-stats" style="font-family:'Press Start 2P'; font-size:12px; color:var(--text-dark); margin-bottom:15px; display:flex; justify-content:space-between;">
+                    <span id="memory-moves">Moves: 0</span>
+                    <span id="memory-pairs">Pairs: 0/6</span>
+                </div>
+                <div class="memory-grid grid-container grid-4x3" id="memory-grid">
+                    <!-- Memory cards generated by JS -->
+                </div>
+            </div>
+
+            <div class="reward-container hidden" id="reward-3">
+                <div class="reward-photo-frame">
+                    <img src="https://via.placeholder.com/250" alt="Our memory" class="reward-photo" id="reward-photo-3">
+                </div>
+                <p class="reward-message" id="reward-msg-3">Some memories are worth holding onto forever. This is one of them. 🃏💕</p>
+                <button class="btn-pixel gold" onclick="goToStage(4)">
+                    NEXT LEVEL ►
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== STAGE 4: SCRATCH CARD ==================== -->
+    <section class="stage" id="stage-4">
+        <div class="stage-content">
+            <div class="stage-header">
+                <span class="stage-number" style="font-family:'Press Start 2P'; font-size:12px; color:var(--accent-gold);">LEVEL 1-4</span>
+                <h2 class="stage-title">Scratch to Reveal</h2>
+                <p class="stage-desc">Use your mouse to scratch away the golden cover...</p>
+            </div>
+
+            <div class="puzzle-card pixel-box">
+                <div class="scratch-container" id="scratch-wrapper">
+                    <!-- ✏️ CUSTOMIZE: Replace with your photo -->
+                    <img src="https://via.placeholder.com/300" alt="Hidden memory" class="scratch-reveal" id="scratch-reveal">
+                    <canvas id="scratch-canvas"></canvas>
+                </div>
+                <p class="scratch-hint" id="scratch-hint" style="color:var(--text-dark); margin-top:10px;">Scratch the golden area above! ✨</p>
+            </div>
+
+            <div class="reward-container hidden" id="reward-4">
+                <p class="reward-message" id="reward-msg-4">Beneath every layer, there's always more love to discover. 🎴💕</p>
+                <button class="btn-pixel gold" onclick="goToStage(5)">
+                    BOSS LEVEL ►
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== STAGE 5: GRAND FINALE ==================== -->
+    <section class="stage" id="stage-5">
+        <div class="stage-content finale-content">
+            <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:99;"></canvas>
+            
+            <div class="finale-header" style="margin-bottom:30px;">
+                <h2 class="landing-title" style="font-size:32px;">Happy 22nd Birthday!</h2>
+                <p class="finale-subtitle" style="font-size:28px; color:var(--accent-gold);">YOU WIN THE GAME 🎉</p>
+            </div>
+
+            <div class="finale-gallery" id="finale-gallery">
+                <!-- Photos populated by JS -->
+            </div>
+
+            <div class="finale-message pixel-box">
+                <!-- ✏️ CUSTOMIZE: Add your final dedication below -->
+                <p class="dedication-text" id="dedication-text" style="font-size:28px; line-height:1.4;">
+                    Your final dedication message goes here. Make it special, make it from the heart. 
+                    She deserves the world and more. Happy 22nd birthday, my love! 🎂💕
+                </p>
+                <p class="dedication-signature" style="text-align:right; margin-top:20px; color:var(--primary-rose);">— Player 1 ❤️</p>
+            </div>
+
+            <div class="finale-actions" style="margin-top:40px;">
+                <button class="btn-pixel gold" onclick="replayAdventure()">
+                    PLAY AGAIN
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Audio (optional) -->
+    <button class="audio-toggle" id="audio-toggle" onclick="toggleAudio()" title="Toggle music">
+        🔇
+    </button>
+
+    <script src="js/countdown.js"></script>
+    <script src="js/confetti.js"></script>
+    <script src="js/puzzles.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
