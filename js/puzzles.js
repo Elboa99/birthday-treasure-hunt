@@ -47,6 +47,11 @@ function selectQuizAnswer(qIndex, selectedAnswer) {
         
         updateCombo(true);
         updateProgressPath();
+        
+        // Trigger stars at button position
+        const rect = buttons[0].getBoundingClientRect(); // Rough center
+        triggerStars(window.innerWidth / 2, window.innerHeight / 2);
+        
         advanceQuiz();
     } else {
         // Wrong
@@ -145,9 +150,10 @@ function startTimer() {
         if (timeLeft <= 5) {
             timerFill.classList.add('danger');
             timerText.classList.add('danger');
-            if(typeof SFX !== 'undefined' && timeLeft > 0) SFX.playBlip(); // Tick tick sound
+            if(typeof SFX !== 'undefined' && timeLeft > 0) SFX.playTimerTick(true);
         } else if (timeLeft <= totalTime / 2) {
             timerFill.classList.add('warning');
+            if(typeof SFX !== 'undefined' && timeLeft > 0) SFX.playTimerTick(false);
         }
     };
     
@@ -209,6 +215,12 @@ function loseLife() {
         heart.classList.remove('full');
         heart.classList.remove('recovered'); // In case it was recovered previously
         heart.classList.add('taking-damage');
+        
+        // Screen shake on life loss
+        document.body.classList.remove('shake');
+        void document.body.offsetWidth;
+        document.body.classList.add('shake');
+        
         setTimeout(() => {
             heart.classList.remove('taking-damage');
             heart.classList.add('lost');
@@ -218,6 +230,7 @@ function loseLife() {
     lives--;
     
     if (lives === 0) {
+        if(typeof SFX !== 'undefined') SFX.playGameOver();
         setTimeout(() => triggerGameOver("Out of lives!"), 500);
     }
 }
@@ -231,7 +244,7 @@ function regainLife() {
         heart.classList.remove('lost');
         heart.classList.add('recovered');
         heart.classList.add('full');
-        if(typeof SFX !== 'undefined') SFX.playWin(); // Or a specific 1-up sound
+        if(typeof SFX !== 'undefined') SFX.playLifeUp();
     }
 }
 
@@ -293,15 +306,60 @@ function triggerGameOver(msg = "You ran out of lives!") {
     const overlay = document.getElementById('game-over-overlay');
     const msgEl = document.getElementById('game-over-msg');
     const statsEl = document.getElementById('game-over-stats');
+    const title = overlay.querySelector('.game-over-title');
+    
+    if (title) title.classList.add('glitch-text');
     
     msgEl.innerText = msg;
     statsEl.innerHTML = `Score: <span style="color:var(--text-light)">${score}/5</span><br>Reached Q: <span style="color:var(--text-light)">${currentQuestion}</span>`;
     
     overlay.classList.remove('hidden');
     
-    // Stop level music if needed, play game over sound
-    if(typeof SFX !== 'undefined') SFX.playError();
+    if(typeof SFX !== 'undefined') SFX.playGameOver();
 }
+
+// --- PARTICLE SYSTEM: PIXEL STARS ---
+function triggerStars(x, y) {
+    const container = document.body;
+    for (let i = 0; i < 15; i++) {
+        const star = document.createElement('div');
+        star.className = 'pixel-star';
+        star.innerHTML = '✦'; 
+        star.style.left = x + 'px';
+        star.style.top = y + 'px';
+        star.style.color = ['#FFD700', '#FF69B4', '#FFF'][Math.floor(Math.random() * 3)];
+        star.style.fontSize = (12 + Math.random() * 20) + 'px';
+        
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 3 + Math.random() * 8;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+        
+        let posX = x;
+        let posY = y;
+        let opacity = 1;
+        
+        const animate = () => {
+            posX += vx;
+            posY += vy;
+            posY += 0.1; // slight gravity
+            opacity -= 0.02;
+            star.style.left = posX + 'px';
+            star.style.top = posY + 'px';
+            star.style.opacity = opacity;
+            
+            if (opacity > 0) {
+                requestAnimationFrame(animate);
+            } else {
+                star.remove();
+            }
+        };
+        
+        container.appendChild(star);
+        requestAnimationFrame(animate);
+    }
+}
+
 
 function restartQuizFromGameOver() {
     // Reset Variables

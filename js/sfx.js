@@ -72,6 +72,45 @@ const SFX = {
         setTimeout(() => this.playTone(659.25, 'square', 0.1, 0.1), 100);
         setTimeout(() => this.playTone(783.99, 'square', 0.1, 0.1), 200);
         setTimeout(() => this.playTone(1046.50, 'square', 0.3, 0.1), 300);
+    },
+
+    // --- New Polish SFX ---
+
+    // Game Over: Dramatically falling pitch
+    playGameOver: function() {
+        this.ensureAudio();
+        const now = this.audioCtx.currentTime;
+        const oscillator = this.audioCtx.createOscillator();
+        const gainNode = this.audioCtx.createGain();
+
+        oscillator.type = 'sawtooth';
+        oscillator.frequency.setValueAtTime(300, now);
+        oscillator.frequency.exponentialRampToValueAtTime(40, now + 1.5);
+
+        gainNode.gain.setValueAtTime(0.1, now);
+        gainNode.gain.linearRampToValueAtTime(0, now + 1.5);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(this.audioCtx.destination);
+
+        oscillator.start();
+        oscillator.stop(now + 1.5);
+    },
+
+    // 1-UP / Life Regained: Fast upward arpeggio
+    playLifeUp: function() {
+        this.ensureAudio();
+        const notes = [392, 523, 659, 783, 1046]; // G4, C5, E5, G5, C6
+        notes.forEach((freq, i) => {
+            setTimeout(() => this.playTone(freq, 'square', 0.1, 0.05), i * 60);
+        });
+    },
+
+    // Timer Tick-Tock: Short noise pulses
+    playTimerTick: function(isCritical = false) {
+        this.ensureAudio();
+        const freq = isCritical ? 800 : 400;
+        this.playTone(freq, 'square', 0.05, 0.03);
     }
 };
 
