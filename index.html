@@ -391,6 +391,22 @@
         </div>
     </div>
 
+    <!-- Admin Debug Panel (Hidden by default, Shift+D to toggle) -->
+    <div id="admin-panel" class="hidden">
+        <div class="admin-panel-box">
+            <h3 class="admin-title">DEBUG MODE</h3>
+            <div class="admin-buttons">
+                <button onclick="adminSkipTo(1)">STAGE 1</button>
+                <button onclick="adminSkipTo(2)">STAGE 2</button>
+                <button onclick="adminSkipTo(3)">STAGE 3</button>
+                <button onclick="adminSkipTo(4)">STAGE 4</button>
+                <button onclick="adminSkipTo(5)">STAGE 5</button>
+                <button onclick="adminSkipTo(6)">FINALE</button>
+            </div>
+            <p style="font-size: 10px; margin-top: 10px;">(Shift + D to Close)</p>
+        </div>
+    </div>
+
     <script src="js/sfx.js"></script>
     <script src="js/particles.js"></script>
     <script src="js/countdown.js"></script>

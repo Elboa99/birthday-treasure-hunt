@@ -698,6 +698,55 @@ button {
 .btn-pixel-small:hover, .btn-pixel-small:active {
     transform: translateY(2px);
 }
+/* --- Admin Debug Panel --- */
+#admin-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10001;
+    pointer-events: auto;
+}
+
+#admin-panel.hidden {
+    display: none !important;
+}
+
+.admin-panel-box {
+    background-color: #1a1a1a;
+    border: 3px solid var(--accent-gold);
+    padding: 15px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.8);
+    image-rendering: pixelated;
+    text-align: center;
+}
+
+.admin-title {
+    font-size: 14px;
+    color: var(--accent-gold);
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 0 #000;
+}
+
+.admin-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.admin-buttons button {
+    background: #333;
+    color: #fff;
+    border: 2px solid #555;
+    padding: 5px;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.admin-buttons button:hover {
+    background: var(--primary-rose);
+    border-color: #fff;
+}
+
 @media (max-width: 600px) {
     .music-player {
         top: 10px;
@@ -713,3 +762,4 @@ button {
         padding: 3px;
     }
 }
+

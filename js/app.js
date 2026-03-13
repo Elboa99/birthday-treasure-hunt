@@ -289,3 +289,38 @@ function replayAdventure() {
     document.getElementById('stage-landing').classList.add('active');
     updateProgress();
 }
+
+// --- ADMIN DEBUG TOOLS ---
+// Shift + D to toggle
+document.addEventListener('keydown', (e) => {
+    if (e.shiftKey && e.key.toUpperCase() === 'D') {
+        const panel = document.getElementById('admin-panel');
+        if (panel) {
+            panel.classList.toggle('hidden');
+            if(typeof SFX !== 'undefined') SFX.playBlip();
+        }
+    }
+});
+
+function adminSkipTo(stageNum) {
+    console.log("Admin: Skipping to stage " + stageNum);
+    
+    // Stop any existing quiz timers
+    if(typeof stopTimer === 'function') stopTimer();
+    
+    // Clean up current rewards so they don't overlap if moving backwards
+    for(let i=1; i<=4; i++) {
+        const reward = document.getElementById(`reward-${i}`);
+        if(reward) reward.classList.add('hidden');
+    }
+    
+    // Use executeGoToStage to bypass transitions and maps for speed
+    executeGoToStage(stageNum);
+    
+    // Clear and close panel
+    const panel = document.getElementById('admin-panel');
+    if (panel) panel.classList.add('hidden');
+    
+    if(typeof SFX !== 'undefined') SFX.playWin();
+}
+
