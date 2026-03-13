@@ -44,6 +44,43 @@ let transitionCallback = null;
 let walkInterval = null;
 let transitionTimeoutId = null;
 
+// --- WEB SPEECH API FOR HARRY'S VOICE ---
+function speakHarry(text) {
+    if (!('speechSynthesis' in window)) return;
+    
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    // Voices might take a moment to load
+    const speak = () => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        const voices = window.speechSynthesis.getVoices();
+        
+        // Priority: British Male -> English Male -> Any English -> First Available
+        let selectedVoice = voices.find(v => v.lang.includes('en-GB') && v.name.includes('Male')) ||
+                           voices.find(v => v.lang.includes('en-GB')) ||
+                           voices.find(v => v.lang.includes('en')) ||
+                           voices[0];
+        
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+        
+        // Robotic/Pixel-style adjustments
+        utterance.pitch = 0.9; // Slightly deeper for Harry
+        utterance.rate = 1.0;  // Normal speed
+        utterance.volume = 0.8;
+        
+        window.speechSynthesis.speak(utterance);
+    };
+
+    if (window.speechSynthesis.getVoices().length === 0) {
+        window.speechSynthesis.onvoiceschanged = speak;
+    } else {
+        speak();
+    }
+}
+
 function playTransition(toStageIndex, onCompleteCallback) {
     const sceneData = TransitionScenes[toStageIndex - 1];
     
@@ -101,6 +138,9 @@ function playTransition(toStageIndex, onCompleteCallback) {
                 container.classList.add(sceneData.actionClass);
                 speechBubble.classList.add('visible');
                 
+                // Speak the dialog!
+                speakHarry(sceneData.dialog);
+                
                 // 3. Wait and exit
                 transitionTimeoutId = setTimeout(endTransition, 3500); // Wait a bit longer to read text
             }, 500);
@@ -111,6 +151,7 @@ function playTransition(toStageIndex, onCompleteCallback) {
 function skipTransition() {
     if(walkInterval) clearInterval(walkInterval);
     if(transitionTimeoutId) clearTimeout(transitionTimeoutId);
+    if('speechSynthesis' in window) window.speechSynthesis.cancel(); // Stop talking if skipped
     endTransition();
 }
 

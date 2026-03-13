@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>22 Clues for You 💕</title>
     <meta name="description" content="A special interactive treasure hunt for an amazing 22nd birthday">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,8 +52,20 @@
         <div class="pixel-heart" data-step="6"></div>
     </div>
 
+    <!-- ==================== NAME INPUT STAGE ==================== -->
+    <section class="stage active" id="stage-name-input">
+        <div class="landing-content">
+            <h1 class="landing-title">Welcome Player!</h1>
+            <p class="landing-subtitle">Enter your name to begin the adventure:</p>
+            <input type="text" id="player-name-input" class="pixel-input" placeholder="YOUR NAME..." maxlength="15">
+            <button class="btn-pixel gold" onclick="saveName()">
+                SUBMIT ►
+            </button>
+        </div>
+    </section>
+
     <!-- ==================== LANDING PAGE ==================== -->
-    <section class="stage active" id="stage-landing">
+    <section class="stage" id="stage-landing">
         <div class="landing-content">
             <div class="sparkle-container">
                 <h1 class="landing-title">
@@ -209,7 +221,7 @@
             <div class="reward-container hidden" id="reward-1">
                 <div class="reward-photo-frame">
                     <!-- ✏️ CUSTOMIZE: Replace with your photo -->
-                    <img src="images/reward-1.jpg" alt="Our memory" class="reward-photo" id="reward-photo-1">
+                    <img src="images/IMG_0213.jpg" alt="Our memory" class="reward-photo" id="reward-photo-1">
                 </div>
                 <!-- ✏️ CUSTOMIZE: Change the message below -->
                 <p class="reward-message" id="reward-msg-1">You know your shows, but you know my heart even better. 💕</p>
@@ -239,7 +251,7 @@
             <div class="reward-container hidden" id="reward-2">
                 <div class="reward-photo-frame">
                     <!-- ✏️ CUSTOMIZE: This shows the complete jigsaw photo -->
-                    <img src="images/reward-2.jpg" alt="Our memory" class="reward-photo" id="reward-photo-2">
+                    <img src="images/IMG_0289.jpg" alt="Our memory" class="reward-photo" id="reward-photo-2">
                 </div>
                 <p class="reward-message" id="reward-msg-2">Every piece of my life is better with you in it. 🧩💕</p>
                 <button class="btn-pixel gold" onclick="goToStage(3)">
@@ -270,7 +282,7 @@
 
             <div class="reward-container hidden" id="reward-3">
                 <div class="reward-photo-frame">
-                    <img src="images/reward-3.jpg" alt="Our memory" class="reward-photo" id="reward-photo-3">
+                    <img src="images/IMG_0761.jpg" alt="Our memory" class="reward-photo" id="reward-photo-3">
                 </div>
                 <p class="reward-message" id="reward-msg-3">Some memories are worth holding onto forever. This is one of them. 🃏💕</p>
                 <button class="btn-pixel gold" onclick="goToStage(4)">
@@ -281,7 +293,7 @@
     </section>
 
     <!-- ==================== STAGE 4: SCRATCH CARD ==================== -->
-    <section class="stage" id="stage-4">
+    <section class="stage pixelated-bg" id="stage-4" style="background-image: url('images/b6c1f839-5e04-4c94-893d-6551d5ed773d.jpg');">
         <div class="stage-content">
             <div class="stage-header">
                 <span class="stage-number" style="font-family:'Press Start 2P'; font-size:12px; color:var(--accent-gold);">LEVEL 1-4</span>
@@ -292,13 +304,16 @@
             <div class="puzzle-card pixel-box">
                 <div class="scratch-container" id="scratch-wrapper">
                     <!-- ✏️ CUSTOMIZE: Replace with Harry Styles / 1D photo -->
-                    <img src="images/reward-4.jpg" alt="Hidden memory" class="scratch-reveal" id="scratch-reveal">
+                    <img src="images/IMG_2638.jpg" alt="Hidden memory" class="scratch-reveal" id="scratch-reveal">
                     <canvas id="scratch-canvas"></canvas>
                 </div>
                 <p class="scratch-hint" id="scratch-hint" style="color:var(--text-dark); margin-top:10px;">Scratch the golden area above! ✨</p>
             </div>
 
             <div class="reward-container hidden" id="reward-4">
+                <div class="reward-photo-frame" style="margin-bottom:15px;">
+                    <img src="images/IMG_1142.jpg" alt="Our reward" class="reward-photo" id="reward-photo-4">
+                </div>
                 <p class="reward-message" id="reward-msg-4">We can "Dance No More", but I will never stop loving you. 🎴💕</p>
                 <button class="btn-pixel gold" onclick="goToStage(5)">
                     BOSS LEVEL ►
@@ -330,32 +345,37 @@
         <div class="stage-content finale-content">
             <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:99;"></canvas>
             
-            <div class="finale-header" style="margin-bottom:30px;">
+            <div class="finale-header" style="margin-bottom: 20px;">
                 <h2 class="landing-title" style="font-size:32px;">Happy 22nd Birthday!</h2>
-                <p class="finale-subtitle" style="font-size:28px; color:var(--accent-gold);">YOU WIN THE GAME 🎉</p>
+                <p class="finale-subtitle" style="font-size:28px; color:var(--accent-gold); margin-bottom: 10px;">YOU WIN THE GAME 🎉</p>
+                <!-- Dedicated container for stats to prevent overlap -->
+                <div id="finale-stats-container"></div>
             </div>
 
-            <div class="finale-gallery" id="finale-gallery">
-                <!-- Photos populated by JS -->
-            </div>
+            <!-- Finale gallery removed -->
 
             <!-- Animated Envelope -->
-            <div class="envelope-container" id="envelope-container">
-                <div class="envelope">
-                    <div class="envelope-flap"></div>
+            <div class="envelope-container" id="envelope-container" onclick="toggleEnvelope()">
+                <div class="envelope-wrapper">
+                    <!-- Flap is separate for better layering control -->
+                    <div class="envelope-flap" id="envelope-flap"></div>
+                    
                     <div class="envelope-body">
-                        <div class="wax-seal">💕</div>
-                    </div>
-                    <div class="letter" id="letter-content">
-                        <div class="letter-inner">
-                            <p class="dedication-text" id="dedication-text" style="font-size:22px; line-height:1.6;">
-                                From "Story of My Life" to "Sign of the Times", I love you more every day. 
-                                And if you didn't smile at least once playing this... that's some white shit. 😂
-                                <br><br>Happy 22nd birthday, my love! 🎂💕
-                            </p>
-                            <p class="dedication-signature" style="text-align:right; margin-top:20px; color:var(--primary-rose);">— Player 1 ❤️</p>
+                        <div class="letter" id="letter-content">
+                            <div class="letter-inner">
+                                <div class="pixel-heart-deco"></div>
+                                <p class="dedication-text" id="dedication-text">
+                                    From "Story of My Life" to "Sign of the Times", I love you more every day. 
+                                    And if you didn't smile at least once playing this... sybau nigg.. scherzoo... that's some white shit. 😂/ Jokes asides sai che sono scemo e che a volte mi cringio però ily e spero che ti sia piaciutò sto giochino
+                                    <br><br>Happy 22nd birthday amorino gattino! 🎂💕
+                                </p>
+                                <p class="dedication-signature" style="opacity: 0; transition: opacity 1s ease;">— Player 1 ❤️</p>
+                            </div>
                         </div>
+                        <div class="envelope-front-shadow"></div>
                     </div>
+                    
+                    <div class="wax-seal" id="wax-seal">💕</div>
                 </div>
             </div>
 

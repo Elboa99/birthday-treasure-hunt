@@ -42,7 +42,6 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    /* subtle pixel grid background */
     background-image: 
         linear-gradient(rgba(186, 74, 118, 0.1) 1px, transparent 1px),
         linear-gradient(90deg, rgba(186, 74, 118, 0.1) 1px, transparent 1px);
@@ -74,17 +73,14 @@ button {
     position: relative;
     max-width: 600px;
     width: 90%;
-    
-    /* Pixel shadow/border effect */
     box-shadow: 
         -4px 0 0 0 var(--text-dark),
         4px 0 0 0 var(--text-dark),
         0 -4px 0 0 var(--text-dark),
         0 4px 0 0 var(--text-dark),
-        -8px 8px 0 0 rgba(0,0,0,0.5); /* Retro drop shadow */
+        -8px 8px 0 0 rgba(0,0,0,0.5);
 }
 
-/* Add inner light border for 3D pixel effect */
 .pixel-box::before {
     content: '';
     position: absolute;
@@ -105,41 +101,37 @@ button {
     color: var(--text-light);
     border: none;
     padding: 16px 24px;
-    font-size: 14px; /* Press Start is very wide */
+    font-size: 14px;
     text-align: center;
     position: relative;
     margin: 10px;
     text-transform: uppercase;
-    
-    /* Box shadow to create pixel border */
     box-shadow: 
-        inset -4px -4px 0px 0px rgba(0,0,0,0.3), /* inner shadow down-right */
-        inset 4px 4px 0px 0px rgba(255,255,255,0.4), /* inner highlight up-left */
+        inset -4px -4px 0px 0px rgba(0,0,0,0.3),
+        inset 4px 4px 0px 0px rgba(255,255,255,0.4),
         -4px 0 0 0 var(--text-dark),
         4px 0 0 0 var(--text-dark),
         0 -4px 0 0 var(--text-dark),
         0 4px 0 0 var(--text-dark),
-        0 8px 0 0 rgba(0,0,0,0.3); /* outer drop shadow */
-    
+        0 8px 0 0 rgba(0,0,0,0.3);
     transition: transform 0.1s, box-shadow 0.1s;
 }
 
 .btn-pixel:hover {
-    background-color: #d15687; /* Slightly lighter rose */
+    background-color: #d15687;
 }
 
 .btn-pixel:active {
     transform: translateY(4px);
     box-shadow: 
-        inset 4px 4px 0px 0px rgba(0,0,0,0.3), /* flip inner shadow when pressed */
+        inset 4px 4px 0px 0px rgba(0,0,0,0.3),
         -4px 0 0 0 var(--text-dark),
         4px 0 0 0 var(--text-dark),
         0 -4px 0 0 var(--text-dark),
         0 4px 0 0 var(--text-dark),
-        0 4px 0 0 rgba(0,0,0,0.3); /* reduced outer shadow */
+        0 4px 0 0 rgba(0,0,0,0.3);
 }
 
-/* Accent button (Gold) */
 .btn-pixel.gold {
     background-color: var(--accent-gold);
     color: var(--text-dark);
@@ -165,7 +157,6 @@ button {
     position: relative;
 }
 
-/* Background Image Overlays for Stages */
 .stage::before {
     content: '';
     position: absolute;
@@ -175,7 +166,7 @@ button {
     height: 100%;
     background-size: cover;
     background-position: center;
-    opacity: 0.15; /* Subtle enough not to distract */
+    opacity: 0.15;
     z-index: -1;
     image-rendering: pixelated;
 }
@@ -184,6 +175,14 @@ button {
 #stage-2::before { background-image: url('../images/bg-jigsaw.png'); }
 #stage-3::before { background-image: url('../images/bg-memory.png'); }
 #stage-4::before { background-image: url('../images/bg-scratch.png'); }
+#stage-5::before { background-image: url('../images/bg-quiz.png'); }
+#stage-6::before { background-image: url('../images/bg-quiz.png'); opacity: 0.1; }
+
+/* Stage 6 adjustment */
+#stage-6 {
+    height: 100vh;
+    overflow: hidden;
+}
 
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -208,8 +207,7 @@ button {
     width: 24px;
     height: 24px;
     margin: 0 5px;
-    background-color: #333; /* Empty state */
-    /* Pixel heart shape via clip-path or background image */
+    background-color: #333;
     clip-path: polygon(10% 30%, 30% 10%, 50% 30%, 70% 10%, 90% 30%, 90% 50%, 50% 90%, 10% 50%);
     opacity: 0.5;
     transition: all 0.3s;
@@ -231,8 +229,21 @@ button {
     text-align: center;
     max-width: 800px;
     width: 100%;
-    margin-top: 60px; /* Account for fixed progress bar */
+    margin-top: 60px;
     z-index: 10;
+    position: relative;
+}
+
+/* Finale content */
+.finale-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 800px;
+    height: 100%;
     position: relative;
 }
 
@@ -312,6 +323,29 @@ button {
     margin-bottom: 5px;
 }
 
+/* Pixel Input Style */
+.pixel-input {
+    background-color: #fff;
+    border: none;
+    padding: 12px 16px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    color: var(--text-dark);
+    margin: 20px 0;
+    width: 250px;
+    text-align: center;
+    box-shadow: 
+        -4px 0 0 0 #332111,
+        4px 0 0 0 #332111,
+        0 -4px 0 0 #332111,
+        0 4px 0 0 #332111;
+    outline: none;
+}
+
+.pixel-input:focus {
+    background-color: #fce4ec;
+}
+
 /* --- Puzzle Elements --- */
 .stage-title {
     color: var(--primary-rose);
@@ -324,7 +358,6 @@ button {
     color: #fff;
     text-shadow: 2px 2px 4px #000;
 }
-
 
 .pix-input {
     font-family: 'VT323', monospace;
@@ -364,7 +397,7 @@ button {
     .quiz-options { grid-template-columns: 1fr; }
 }
 
-/* Reward Photo Frame (Pixel polaroid) */
+/* Reward Photo Frame */
 .reward-photo-frame {
     background: white;
     padding: 12px 12px 40px 12px;
@@ -383,14 +416,13 @@ button {
     width: 100%;
     height: auto;
     display: block;
-    /* Optional: make photos slightly pixelated */
     image-rendering: pixelated;
 }
 
 .reward-message {
-    color: #fff; /* Changed to white for better contrast */
+    color: #fff;
     text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
-    font-size: 32px; /* VT323 needs to be large */
+    font-size: 32px;
     line-height: 1.2;
     margin: 20px 0;
 }
@@ -405,7 +437,7 @@ button {
 }
 .grid-3x3 {
     grid-template-columns: repeat(3, 1fr);
-    max-width: 320px; /* Slightly larger for touch */
+    max-width: 320px;
 }
 .grid-4x3 {
     grid-template-columns: repeat(4, 1fr);
@@ -472,17 +504,20 @@ button {
     40%, 60% { transform: translate3d(8px, 0, 0); }
 }
 
-/* --- Finale Gallery --- */
+/* =========================================================================
+   FINALE GALLERY - Polaroid photos in normal page flow
+   ========================================================================= */
 .finale-gallery {
-    margin: 30px 0;
-    width: 100%;
+    display: none;
 }
+
 .photo-carousel {
     display: flex;
     justify-content: center;
     gap: 15px;
     flex-wrap: wrap;
 }
+
 .carousel-photo {
     width: 120px;
     height: 120px;
@@ -498,7 +533,6 @@ button {
     transform: scale(0.8) rotate(var(--rot, -5deg));
 }
 
-/* Give random rotations to carousel photos manually using nth-child */
 .carousel-photo:nth-child(even) { --rot: 5deg; }
 .carousel-photo:nth-child(3n) { --rot: -8deg; }
 .carousel-photo:nth-child(4n) { --rot: 8deg; }
@@ -508,96 +542,285 @@ button {
 }
 
 @keyframes popInPhoto {
-    100% { opacity: 1; transform: scale(1) rotate(var(--rot)); }
+    0%   { opacity: 0; transform: translate(var(--off-x, 0), var(--off-y, 0)) scale(0.5) rotate(var(--rot)); }
+    100% { opacity: 1; transform: translate(var(--off-x, 0), var(--off-y, 0)) scale(1) rotate(var(--rot)); }
+}
+
+/* =========================================================================
+   Polaroid Pixel Style
+   ========================================================================= */
+.polaroid-pixel {
+    background: #fff;
+    padding: 8px 8px 24px 8px;
+    box-shadow: 
+        0 4px 0 rgba(0,0,0,0.3),
+        4px 0 0 rgba(0,0,0,0.3),
+        -4px 0 0 rgba(0,0,0,0.3),
+        0 -4px 0 rgba(0,0,0,0.3);
+    transform: translate(var(--off-x, 0), var(--off-y, 0)) rotate(var(--rot, 0deg));
+    transition: transform 0.3s ease, opacity 0.5s ease;
+    width: 120px;
+    position: absolute;
+    opacity: 0.4; /* Dimmed for background effect */
+}
+
+.polaroid-pixel img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    display: block;
+    image-rendering: auto;
+    border: 1px solid #ddd;
+}
+
+.polaroid-pixel:hover {
+    transform: scale(1.2) rotate(0deg) !important;
+    z-index: 100;
 }
 
 /* =========================================================================
    Animated Envelope & Letter
    ========================================================================= */
 .envelope-container {
-    perspective: 800px;
-    margin: 30px auto;
-    width: 280px;
+    perspective: 1200px;
+    margin: 30px auto 20px auto;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    cursor: pointer;
+    z-index: 50;
+    /* Height adapts: closed = 300px, open = taller via wrapper */
+    height: 300px;
 }
 
-.envelope {
+.envelope-wrapper {
     position: relative;
-    width: 280px;
-    height: 180px;
-    margin: 0 auto;
+    width: 100%;
+    height: 250px;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
 }
 
 .envelope-body {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 130px;
-    background: #f5e6d0;
-    border: 4px solid var(--text-dark);
-    box-shadow:
-        inset 0 -20px 30px rgba(0,0,0,0.05),
-        4px 4px 0 rgba(0,0,0,0.2);
-    z-index: 2;
+    height: 100%;
+    background: #e3c49e; 
+    box-shadow: 
+        0 4px 0 0 #332111,
+        4px 0 0 0 #332111,
+        -4px 0 0 0 #332111,
+        0 -4px 0 0 #332111;
+    z-index: 10;
+    transform-style: preserve-3d;
+    background-image: 
+        linear-gradient(45deg, rgba(0,0,0,0.05) 50%, transparent 50%),
+        linear-gradient(-45deg, rgba(0,0,0,0.05) 50%, transparent 50%);
+    background-size: 100% 100%;
 }
 
 .envelope-flap {
     position: absolute;
-    top: 0;
+    top: -4px;
     left: 0;
-    width: 0; height: 0;
-    border-left: 140px solid transparent;
-    border-right: 140px solid transparent;
-    border-top: 80px solid #e8d5b8;
-    z-index: 3;
+    width: auto;
+    height: 0;
+    border-left-width: calc(45vw);
+    border-right-width: calc(45vw);
+    border-left-style: solid;
+    border-right-style: solid;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top: 151px solid #f5e0c5;
+    z-index: 20; 
     transform-origin: top center;
-    animation: openFlap 1s ease-out 1.5s forwards;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.3s step-end;
+    filter: drop-shadow(0 4px 0 #332111);
 }
 
-.wax-seal {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 28px;
-    z-index: 4;
-    animation: sealBounce 0.5s ease-out 1s forwards;
+@media (min-width: 600px) {
+    .envelope-flap {
+        border-left-width: 300px;
+        border-right-width: 300px;
+    }
 }
 
-@keyframes openFlap {
-    0% { transform: rotateX(0deg); }
-    100% { transform: rotateX(180deg); opacity: 0.3; }
-}
-
-@keyframes sealBounce {
-    0% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.3); }
-    100% { transform: translateX(-50%) scale(0); opacity: 0; }
+.envelope-wrapper.open .envelope-flap {
+    transform: rotateX(180deg) translateY(4px);
+    z-index: 1;
+    border-top-color: #d2b48c; 
 }
 
 .letter {
     position: absolute;
-    bottom: 5px;
+    bottom: 2px;
     left: 5%;
     width: 90%;
-    background: #fff;
-    border: 3px solid var(--text-dark);
-    padding: 20px 15px;
-    z-index: 1;
-    max-height: 0;
-    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 
+        0 4px 0 #332111,
+        4px 0 0 #332111,
+        -4px 0 0 #332111,
+        0 -4px 0 #332111;
+    padding: 30px;
+    z-index: 5;
     opacity: 0;
-    animation: slideLetterUp 1.2s ease-out 2.5s forwards;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    transform: translateY(0) scale(0.9);
+    transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1) 0.8s,
+                opacity 0.5s ease 0.8s,
+                z-index 0s linear 0.8s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+/* *** LETTERA APERTA — sale esattamente della sua altezza *** */
+.envelope-wrapper.open .letter {
+    opacity: 1;
+    /* Recalibrated to rest in the center of the viewport relative to the envelope position */
+    transform: translate(-50%, -50%) scale(1);
+    z-index: 1000;
+    height: auto;
+    min-height: 400px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    bottom: auto; /* Important: Clear the initial bottom: 2px */
+    width: 90%;
+    max-width: 550px;
+    margin: 0;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.5s, 
+                opacity 0.6s ease 0.5s, 
+                z-index 0s linear 0.5s;
+    pointer-events: auto;
+}
+
+@media (min-width: 600px) {
+    .envelope-wrapper.open .letter {
+        width: 550px;
+        margin-left: 0;
+        left: 50%;
+    }
+}
+
+.wax-seal {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 60px;
+    background: #b22222;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: white;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 
+        0 4px 8px rgba(0,0,0,0.3),
+        inset 0 0 10px rgba(0,0,0,0.5);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 3px solid #8b0000;
+    pointer-events: auto;
+}
+
+.wax-seal:hover {
+    transform: translateX(-50%) scale(1.1) rotate(5deg);
+    background: #d42424;
+}
+
+.envelope-wrapper.open .wax-seal {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) scale(0.5) rotate(-20deg);
+}
+
+/* Pixelated Background Utility */
+.pixelated-bg {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.pixelated-bg::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: inherit;
+    filter: blur(1px) contrast(1.2);
+    z-index: -1;
+    opacity: 0.4;
+}
+
+.pixelated-bg > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Authentic Pixel Heart (Grid style) */
+.pixel-heart-deco {
+    width: 10px;
+    height: 10px;
+    background: #e63946;
+    margin-bottom: 25px;
+    position: relative;
+    box-shadow: 
+        10px 0 0 #e63946, 30px 0 0 #e63946, 40px 0 0 #e63946,
+        0 10px 0 #e63946, 10px 10px 0 #e63946, 20px 10px 0 #e63946, 30px 10px 0 #e63946, 40px 10px 0 #e63946, 50px 10px 0 #e63946,
+        0 20px 0 #e63946, 10px 20px 0 #e63946, 20px 20px 0 #e63946, 30px 20px 0 #e63946, 40px 20px 0 #e63946, 50px 20px 0 #e63946,
+        10px 30px 0 #e63946, 20px 30px 0 #e63946, 30px 30px 0 #e63946, 40px 30px 0 #e63946,
+        20px 40px 0 #e63946, 30px 40px 0 #e63946;
+    margin-left: -25px;
+}
+
+.pixel-heart-deco::before {
+    content: '';
+    position: absolute;
+    top: -10px; left: -20px;
+    width: 10px; height: 10px;
+    background: #e63946;
+    box-shadow: 40px 0 0 #e63946;
+}
+
+.dedication-text {
+    font-size: 22px;
+    line-height: 1.4;
+    color: #332111;
+    font-family: 'VT323', monospace;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.dedication-signature {
+    align-self: flex-end;
+    font-size: 24px;
+    color: #e63946;
+    font-family: 'VT323', monospace;
+    font-weight: bold;
 }
 
 .letter-inner {
-    color: var(--text-dark);
-}
-
-@keyframes slideLetterUp {
-    0% { max-height: 0; opacity: 0; transform: translateY(0); }
-    100% { max-height: 500px; opacity: 1; transform: translateY(-160px); }
+    color: #4a2e00;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
+    font-size: 20px;
+    line-height: 1.6;
+    word-wrap: break-word;
+    font-family: 'VT323', monospace;
 }
 
 @keyframes shake {
@@ -646,9 +869,22 @@ button {
     .countdown-unit { min-width: 70px; padding: 10px; }
     .countdown-number { font-size: 24px; }
     .countdown-text { font-size: 18px; }
+    
+    .polaroid-pixel {
+        max-width: 100px;
+        padding: 5px 5px 20px 5px;
+    }
+    .polaroid-pixel img {
+        width: 100%;
+        height: auto;
+    }
+
+    .envelope-wrapper.open .letter {
+        transform: translate(-50%, -50%) scale(0.95);
+    }
 }
 
-/* Music Player (Responsive Top Right) */
+/* Music Player */
 .music-player {
     position: fixed;
     top: 20px;
@@ -671,7 +907,7 @@ button {
 }
 .track-name {
     font-family: 'Press Start 2P', monospace;
-    color: #FFD1DC; /* Changed to light pink for visibility */
+    color: #FFD1DC;
     font-size: 10px;
     text-transform: uppercase;
     white-space: nowrap;
@@ -698,6 +934,7 @@ button {
 .btn-pixel-small:hover, .btn-pixel-small:active {
     transform: translateY(2px);
 }
+
 /* --- Admin Debug Panel --- */
 #admin-panel {
     position: fixed;
@@ -746,20 +983,3 @@ button {
     background: var(--primary-rose);
     border-color: #fff;
 }
-
-@media (max-width: 600px) {
-    .music-player {
-        top: 10px;
-        right: 10px;
-        width: 130px;
-        padding: 5px;
-    }
-    .track-name {
-        font-size: 8px;
-    }
-    .btn-pixel-small {
-        font-size: 12px;
-        padding: 3px;
-    }
-}
-

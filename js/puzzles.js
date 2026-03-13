@@ -63,6 +63,7 @@ function selectQuizAnswer(qIndex, selectedAnswer) {
         puzzleCard.classList.remove('shake');
         void puzzleCard.offsetWidth; // reflow
         puzzleCard.classList.add('shake');
+        setTimeout(() => puzzleCard.classList.remove('shake'), 400);
         
         if (lives > 0) {
             if(consecutiveFails >= 2) {
@@ -220,6 +221,7 @@ function loseLife() {
         document.body.classList.remove('shake');
         void document.body.offsetWidth;
         document.body.classList.add('shake');
+        setTimeout(() => document.body.classList.remove('shake'), 400);
         
         setTimeout(() => {
             heart.classList.remove('taking-damage');
@@ -420,71 +422,80 @@ function restartQuizFromGameOver() {
 const jigsawContainer = document.getElementById('jigsaw-container');
 let draggedPiece = null;
 
-// Generate 9 pieces randomly
+// Generate 9 pieces
 function initJigsaw() {
     if(!jigsawContainer) return;
     jigsawContainer.innerHTML = '';
     
-    // Array 0-8 for 9 slots
-    const slots = [0,1,2,3,4,5,6,7,8];
-    // Shuffle slots to place pieces randomly
-    const shuffled = [...slots].sort(() => Math.random() - 0.5);
+    const imgSrc = "images/IMG_2199.jpeg";
+    const img = new Image();
+    img.src = imgSrc;
     
-    // Set faint background image on container for preview
-    jigsawContainer.style.backgroundImage = 'url("images/reward-2.jpg")';
-    jigsawContainer.style.backgroundSize = '300px 300px';
-    
-    // Create grid slots
-    for(let i=0; i<9; i++) {
-        const slot = document.createElement('div');
-        slot.className = 'jigsaw-slot';
-        slot.dataset.index = i;
-        slot.style.width = '100px';
-        slot.style.height = '100px';
-        slot.style.backgroundColor = 'rgba(0,0,0,0.7)'; // Dark enough to see, but preview shows through
-        slot.style.position = 'relative';
+    img.onload = () => {
+        const aspect = img.width / img.height;
+        const containerWidth = 300;
+        const containerHeight = containerWidth / aspect;
         
-        // Drag events for slots
-        slot.addEventListener('dragover', e => e.preventDefault());
-        slot.addEventListener('drop', handleDrop);
+        jigsawContainer.style.height = `${containerHeight}px`;
+        jigsawContainer.style.backgroundImage = `url("${imgSrc}")`;
+        jigsawContainer.style.backgroundSize = `${containerWidth}px ${containerHeight}px`;
         
-        jigsawContainer.appendChild(slot);
-    }
-    
-    // Add pieces to random slots
-    const slotElements = document.querySelectorAll('.jigsaw-slot');
-    shuffled.forEach((pieceIndex, i) => {
-        const piece = document.createElement('div');
-        piece.className = 'jigsaw-piece';
-        piece.draggable = true;
-        piece.dataset.correctIndex = pieceIndex;
-        piece.style.width = '100px';
-        piece.style.height = '100px';
-        piece.style.cursor = 'grab';
+        const pieceWidth = containerWidth / 3;
+        const pieceHeight = containerHeight / 3;
+
+        // Array 0-8 for 9 slots
+        const slots = [0,1,2,3,4,5,6,7,8];
+        const shuffled = [...slots].sort(() => Math.random() - 0.5);
         
-        // ✏️ CUSTOMIZE: The jigsaw source image. 
-        // Using a background image offset to create puzzle pieces
-        piece.style.backgroundImage = 'url("images/reward-2.jpg")'; 
-        piece.style.backgroundSize = '300px 300px';
+        // Create grid slots
+        for(let i=0; i<9; i++) {
+            const slot = document.createElement('div');
+            slot.className = 'jigsaw-slot';
+            slot.dataset.index = i;
+            slot.style.width = `${pieceWidth}px`;
+            slot.style.height = `${pieceHeight}px`;
+            slot.style.backgroundColor = 'rgba(0,0,0,0.7)';
+            slot.style.position = 'relative';
+            slot.addEventListener('dragover', e => e.preventDefault());
+            slot.addEventListener('drop', handleDrop);
+            jigsawContainer.appendChild(slot);
+        }
         
-        // Calculate background position based on intended (correct) index
-        const row = Math.floor(pieceIndex / 3);
-        const col = pieceIndex % 3;
-        piece.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
-        
-        // Drag events for pieces
-        piece.addEventListener('dragstart', function() {
-            draggedPiece = this;
-            setTimeout(() => this.style.opacity = '0.5', 0);
+        // Add pieces to random slots
+        const slotElements = jigsawContainer.querySelectorAll('.jigsaw-slot');
+        shuffled.forEach((pieceIndex, i) => {
+            const piece = document.createElement('div');
+            piece.className = 'jigsaw-piece';
+            piece.draggable = true;
+            piece.dataset.correctIndex = pieceIndex;
+            piece.style.width = `${pieceWidth}px`;
+            piece.style.height = `${pieceHeight}px`;
+            piece.style.cursor = 'grab';
+            piece.style.backgroundImage = `url("${imgSrc}")`;
+            piece.style.backgroundSize = `${containerWidth}px ${containerHeight}px`;
+            
+            const row = Math.floor(pieceIndex / 3);
+            const col = pieceIndex % 3;
+            piece.style.backgroundPosition = `-${col * pieceWidth}px -${row * pieceHeight}px`;
+            
+            piece.addEventListener('dragstart', function() {
+                draggedPiece = this;
+                setTimeout(() => this.style.opacity = '0.5', 0);
+            });
+            piece.addEventListener('dragend', function() {
+                this.style.opacity = '1';
+                draggedPiece = null;
+                checkJigsawComplete();
+            });
+
+            // Touch support for dragging logic
+            piece.addEventListener('touchstart', handleTouchStart, {passive: false});
+            piece.addEventListener('touchmove', handleTouchMove, {passive: false});
+            piece.addEventListener('touchend', handleTouchEnd);
+            
+            slotElements[i].appendChild(piece);
         });
-        piece.addEventListener('dragend', function() {
-            this.style.opacity = '1';
-            draggedPiece = null;
-            checkJigsawComplete();
-        });
-        
-        slotElements[i].appendChild(piece);
-    });
+    };
 }
 
 function handleDrop(e) {

@@ -55,12 +55,19 @@
 .bg-meadow {
     background-color: #87CEEB; /* Sky blue */
     background-image: 
+        /* Grass blades */
+        repeating-linear-gradient(90deg, #4CAF50 0, #4CAF50 10px, #3d8c40 10px, #3d8c40 20px),
         linear-gradient(to top, #4CAF50 30%, transparent 30%), /* Grass floor */
         /* Clouds */
         radial-gradient(circle at 20% 20%, #fff 15px, transparent 15px),
         radial-gradient(circle at 25% 15%, #fff 20px, transparent 20px),
+        /* Dandelions/Flowers */
+        radial-gradient(circle at 40% 75%, #FFECb3 4px, transparent 4px),
+        radial-gradient(circle at 60% 80%, #FFECb3 4px, transparent 4px),
         /* Sun */
         radial-gradient(circle at 90% 10%, #D4AF37 30px, transparent 30px);
+    background-size: 20px 10px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+    background-position: 0 70%, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
 }
 
 /* Scene 2: Concert */
@@ -71,10 +78,11 @@
         /* Spotlights */
         conic-gradient(from 180deg at 30% 0%, rgba(255, 255, 255, 0.1) 15deg, transparent 15deg),
         conic-gradient(from 180deg at 70% 0%, rgba(255, 255, 255, 0.1) 15deg, transparent 15deg),
-        /* Crowd Silhouette */
-        repeating-linear-gradient(90deg, #000 0, #000 10px, transparent 10px, transparent 20px);
-    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 40px;
-    background-position: 0 0, 0 0, 0 0, 0 100%;
+        /* Crowd Silhouette with hands up */
+        repeating-linear-gradient(90deg, #000 0, #000 10px, transparent 10px, transparent 20px),
+        radial-gradient(circle at 5px 50%, #000 8px, transparent 8px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 20px 40px, 20px 40px;
+    background-position: 0 0, 0 0, 0 0, 0 100%, 0 95%;
 }
 
 /* Scene 3: Sunset Landscape */
@@ -93,9 +101,12 @@
     background-color: #0c0518;
     background-image: 
         linear-gradient(to top, #3b3a45 30%, transparent 30%), 
-        /* Flashing lights */
-        radial-gradient(circle at 50% 10%, #fff 2px, transparent 2px);
-    background-size: 100% 100%, 80px 80px;
+        /* Flashing stage lights */
+        radial-gradient(circle at 50% 10%, #fff 2px, transparent 2px),
+        /* Confetti dots in bg */
+        radial-gradient(circle at 20% 40%, rgba(255,255,255,0.2) 2px, transparent 2px),
+        radial-gradient(circle at 80% 60%, rgba(255,255,255,0.2) 2px, transparent 2px);
+    background-size: 100% 100%, 80px 80px, 120px 120px, 100px 100px;
     animation: stadiumFlashes 0.5s infinite steps(2);
 }
 

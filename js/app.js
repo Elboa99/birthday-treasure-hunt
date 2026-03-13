@@ -6,6 +6,7 @@
 // Global state
 let currentStage = 0;
 const totalStages = 6;
+let playerName = "Adventurer";
 
 // Game State Tracking
 let gameStartTime = null;
@@ -20,6 +21,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hide progress bar on landing page
     document.getElementById('progress-container').style.display = 'none';
 });
+
+function saveName() {
+    const input = document.getElementById('player-name-input');
+    if (input && input.value.trim() !== "") {
+        playerName = input.value.trim();
+    }
+    
+    // Play blip sound
+    if(typeof SFX !== 'undefined') SFX.playBlip();
+
+    // Transition to landing
+    document.getElementById('stage-name-input').classList.remove('active');
+    document.getElementById('stage-landing').classList.add('active');
+    
+    // Update landing message
+    const subtitle = document.querySelector('#stage-landing .landing-subtitle');
+    if (subtitle) {
+        subtitle.innerText = `Ready for the adventure, ${playerName}?`;
+    }
+}
 
 // Playlist setup
 const playlist = [
@@ -97,14 +118,10 @@ function toggleAudio() {
 }
 
 // Navigate between stages with transition wrapper
-// We rename the old logic to `executeGoToStage`
 function goToStage(stageIndex) {
     if (stageIndex < 0 || stageIndex > totalStages) return;
     
-    // Play map + transition between puzzles (Stage 1->2, 2->3, 3->4, 4->5, 5->6)
-    // Only play if moving forward and past the landing
     if (stageIndex > currentStage && stageIndex > 1) {
-        // Show treasure map first, then transition
         if (typeof showTreasureMap === 'function' && stageIndex <= 5) {
             showTreasureMap(currentStage, () => {
                 if (typeof playTransition === 'function' && stageIndex <= 5) {
@@ -122,38 +139,30 @@ function goToStage(stageIndex) {
         }
     }
     
-    // If no transition needed, just execute immediately
     executeGoToStage(stageIndex);
 }
 
 // The actual internal logic for hiding/showing stages
 function executeGoToStage(stageIndex) {
-    // Hide all stages
     stages.forEach(stage => {
         stage.classList.remove('active');
     });
 
-    // Show target stage
     const targetStage = document.getElementById(`stage-${stageIndex}`);
     if (targetStage) {
         targetStage.classList.add('active');
-        
-        // Always scroll to top on new stage
         window.scrollTo(0, 0);
     }
 
     currentStage = stageIndex;
     updateProgress();
 
-    // Trigger stage-specific initialization
     if (stageIndex === 1) {
-        // Start quiz timer when entering stage 1
         if(typeof startTimer === 'function' && currentQuestion === 1) {
-            setTimeout(startTimer, 500); // Small delay to let transition finish
+            setTimeout(startTimer, 500);
         }
     }
     if (stageIndex === 5) {
-        // Karaoke stage
         if(typeof initKaraoke === 'function') {
             setTimeout(initKaraoke, 500);
         }
@@ -183,21 +192,18 @@ function revealReward(stageNumber) {
     }
 }
 
-// Stage 5 Finale Logic
+// Stage 6 Finale Logic
 function initFinale() {
-    // Trigger massive confetti
     if(typeof confetti !== 'undefined') {
         confetti({particleCount: 150, spread: 100, origin: {y: 0.1}});
         setTimeout(() => confetti({particleCount: 100, spread: 80, origin: {y: 0.2}}), 1000);
         setTimeout(() => confetti({particleCount: 100, spread: 80, origin: {y: 0.3}}), 2000);
     }
     
-    // Play big finish sound
     if(typeof SFX !== 'undefined') {
         setTimeout(() => SFX.playLevelClear(), 500);
     }
 
-    // Calculate Timer
     gameEndTime = Date.now();
     let totalSeconds = Math.floor((gameEndTime - gameStartTime) / 1000);
     if(totalSeconds < 0 || isNaN(totalSeconds)) totalSeconds = 0;
@@ -205,83 +211,101 @@ function initFinale() {
     let seconds = totalSeconds % 60;
     let timeStr = `${minutes > 0 ? minutes + 'm ' : ''}${seconds}s`;
 
-    const gallery = document.getElementById('finale-gallery');
-    if (gallery) {
-        let finalGalleryHTML = `
+    const statsContainer = document.getElementById('finale-stats-container');
+    if (statsContainer) {
+        statsContainer.innerHTML = `
             <div class="finale-stats">
-                <p style="text-shadow: 2px 2px 0 #000;">TOTAL TIME: <span style="color:var(--accent-gold)">${timeStr}</span></p>
+                <p style="text-shadow: 2px 2px 0 #000; margin-bottom: 5px;">TOTAL TIME: <span style="color:var(--accent-gold)">${timeStr}</span></p>
+                <p style="font-size:12px;">CONGRATS, ${playerName.toUpperCase()}!</p>
             </div>
-            <div class="photo-carousel">
         `;
-        
-        // Add unlocked photos to carousel
-        for(let i=1; i<=4; i++) {
-            finalGalleryHTML += `<img src="images/reward-${i}.jpg" class="carousel-photo pop-in" style="animation-delay: ${0.2 * i}s">`;
-        }
-        finalGalleryHTML += `</div>`;
-        gallery.innerHTML = finalGalleryHTML;
     }
 
-    // Typewriter effect for dedication
+    showFinaleGallery();
+}
+
+function openEnvelope() {
+    const wrapper = document.querySelector('.envelope-wrapper');
+    if (!wrapper || wrapper.classList.contains('open')) return;
+    
+    wrapper.classList.add('open');
+    if(typeof SFX !== 'undefined') SFX.playClick();
+    
+    setTimeout(triggerTypewriter, 1500);
+}
+
+function toggleEnvelope() {
+    const wrapper = document.querySelector('.envelope-wrapper');
+    if (!wrapper) return;
+
+    if (!wrapper.classList.contains('open')) {
+        openEnvelope();
+    } else {
+        wrapper.classList.remove('open');
+        if(typeof SFX !== 'undefined') SFX.playClick();
+    }
+}
+
+function showFinaleGallery() {
+    // Gallery disabled as requested
+    const gallery = document.getElementById('finale-gallery');
+    if (gallery) gallery.innerHTML = '';
+}
+
+function triggerTypewriter() {
     const dedTextEl = document.getElementById('dedication-text');
-    if (dedTextEl) {
-        // We read it from a data attribute or direct HTML
-        const originalText = dedTextEl.innerHTML.replace(/\s+/g, ' ').trim();
-        // Clear it
-        dedTextEl.innerHTML = '';
-        
-        let i = 0;
-        let isTag = false;
-        let pText = "";
-        
-        // Simple manual typewriter dealing with HTML tags
-        function typeWriter() {
-            if (i < originalText.length) {
-                if (originalText.charAt(i) === '<') isTag = true;
-                if (originalText.charAt(i) === '>') {
-                    isTag = false;
-                    pText += originalText.charAt(i);
-                    i++;
-                    typeWriter(); // Skip delays on tags
-                    return;
-                }
-                
+    if (!dedTextEl || dedTextEl.getAttribute('data-typed') === 'true') return;
+    
+    dedTextEl.setAttribute('data-typed', 'true');
+    const originalText = dedTextEl.innerHTML.replace(/\s+/g, ' ').trim();
+    dedTextEl.innerHTML = '';
+    
+    let i = 0;
+    let isTag = false;
+    let pText = "";
+    
+    function typeWriter() {
+        if (i < originalText.length) {
+            if (originalText.charAt(i) === '<') isTag = true;
+            if (originalText.charAt(i) === '>') {
+                isTag = false;
                 pText += originalText.charAt(i);
-                dedTextEl.innerHTML = pText + '<span class="t-blink">_</span>';
                 i++;
-                
-                if(typeof SFX !== 'undefined' && !isTag && Math.random() > 0.5) SFX.playBlip(); // Keyboard sound
-
-                setTimeout(typeWriter, isTag ? 0 : 40); // 40ms per char
-            } else {
-                dedTextEl.innerHTML = originalText; // Finish cleanly
+                typeWriter();
+                return;
             }
+            
+            pText += originalText.charAt(i);
+            dedTextEl.innerHTML = pText + '<span class="t-blink">_</span>';
+            i++;
+            
+            if(typeof SFX !== 'undefined' && !isTag && Math.random() > 0.4) SFX.playBlip(); 
+
+            setTimeout(typeWriter, isTag ? 0 : 35);
+        } else {
+            dedTextEl.innerHTML = originalText;
+            const sig = document.querySelector('.dedication-signature');
+            if(sig) sig.style.opacity = '1';
         }
-        
-        // Start typing after gallery appears
-        setTimeout(typeWriter, 1500);
     }
+    typeWriter();
 }
 
 // Replay from the beginning
 function replayAdventure() {
-    // Reset puzzles if reset functions exist
     if(typeof restartQuizFromGameOver === 'function') restartQuizFromGameOver();
     if(typeof resetJigsaw === 'function') resetJigsaw();
     if(typeof resetMemory === 'function') resetMemory();
     if(typeof resetScratch === 'function') resetScratch();
     
-    // Hide rewards
     for(let i=1; i<=4; i++) {
         const reward = document.getElementById(`reward-${i}`);
         if(reward) reward.classList.add('hidden');
     }
     
-    // Clear input
     const q1Input = document.getElementById('q1-answer');
     if(q1Input) q1Input.value = '';
 
-    // Go back to landing
     document.getElementById('progress-container').style.display = 'none';
     currentStage = 0;
     
@@ -291,7 +315,6 @@ function replayAdventure() {
 }
 
 // --- ADMIN DEBUG TOOLS ---
-// Shift + D to toggle
 document.addEventListener('keydown', (e) => {
     if (e.shiftKey && e.key.toUpperCase() === 'D') {
         const panel = document.getElementById('admin-panel');
@@ -303,24 +326,16 @@ document.addEventListener('keydown', (e) => {
 });
 
 function adminSkipTo(stageNum) {
-    console.log("Admin: Skipping to stage " + stageNum);
+    console.log("Admin skip to stage:", stageNum);
     
-    // Stop any existing quiz timers
-    if(typeof stopTimer === 'function') stopTimer();
+    const debugMenu = document.getElementById('admin-panel');
+    if(debugMenu) debugMenu.classList.add('hidden');
     
-    // Clean up current rewards so they don't overlap if moving backwards
-    for(let i=1; i<=4; i++) {
-        const reward = document.getElementById(`reward-${i}`);
-        if(reward) reward.classList.add('hidden');
+    if (!gameStartTime) {
+        gameStartTime = Date.now();
     }
     
-    // Use executeGoToStage to bypass transitions and maps for speed
     executeGoToStage(stageNum);
-    
-    // Clear and close panel
-    const panel = document.getElementById('admin-panel');
-    if (panel) panel.classList.add('hidden');
     
     if(typeof SFX !== 'undefined') SFX.playWin();
 }
-
