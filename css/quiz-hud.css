@@ -1,0 +1,330 @@
+/* =========================================================================
+   quiz-hud.css - Styling for the Quiz Timer, Lives, and Progress
+   ========================================================================= */
+
+/* --- HUD Container --- */
+.quiz-hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(26, 10, 18, 0.8); /* --bg-dark semi-transparent */
+    border: 2px solid var(--primary-rose);
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    position: relative;
+    z-index: 10;
+}
+
+/* --- Lives (Hearts) --- */
+.quiz-lives {
+    display: flex;
+    gap: 5px;
+}
+
+.life-heart {
+    font-size: 20px;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s, opacity 0.3s;
+    display: inline-block;
+}
+
+.life-heart.lost {
+    filter: grayscale(100%);
+    opacity: 0.4;
+    transform: scale(0.6) rotate(15deg);
+}
+
+/* Small animation when regaining a life */
+@keyframes heartRecover {
+    0% { transform: scale(0.6); opacity: 0.5; filter: grayscale(100%); }
+    50% { transform: scale(1.3); opacity: 1; filter: grayscale(0%); }
+    100% { transform: scale(1); opacity: 1; filter: grayscale(0%); }
+}
+.life-heart.recovered {
+    animation: heartRecover 0.5s ease forwards;
+}
+
+/* 小animazione per la scossa di 'danno' */
+@keyframes shakeHeart {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-2px) rotate(-5deg); filter: grayscale(50%); }
+    40%, 80% { transform: translateX(2px) rotate(5deg); filter: grayscale(80%); }
+}
+.life-heart.taking-damage {
+    animation: shakeHeart 0.3s;
+}
+
+/* --- Timer --- */
+.quiz-timer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.timer-bar-bg {
+    width: 100px;
+    height: 12px;
+    background-color: #000;
+    border: 2px solid var(--text-dark);
+    position: relative;
+    overflow: hidden;
+    /* pixel look */
+    image-rendering: pixelated;
+}
+
+.timer-bar-fill {
+    height: 100%;
+    width: 100%;
+    background-color: #4CAF50; /* Green */
+    transition: width 1s linear, background-color 0.3s;
+}
+
+.timer-bar-fill.warning {
+    background-color: #FFC107; /* Yellow */
+}
+
+/* Pulsing red animation for last 5 seconds */
+@keyframes dangerPulse {
+    0% { background-color: #F44336; }
+    50% { background-color: #aa1106; }
+    100% { background-color: #F44336; }
+}
+
+.timer-bar-fill.danger {
+    animation: dangerPulse 0.5s infinite;
+}
+
+.timer-text {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    color: var(--text-light);
+    width: 25px;
+    text-align: right;
+}
+
+.timer-text.danger {
+    color: #F44336;
+    animation: blinkText 0.5s infinite;
+}
+
+@keyframes blinkText {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* --- Combo System --- */
+.quiz-combo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    color: var(--accent-gold);
+    text-shadow: 2px 2px 0 #000;
+    opacity: 1;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.quiz-combo.hidden {
+    opacity: 0;
+    transform: translate(-50%, -100%);
+    pointer-events: none;
+}
+
+/* Bounce animation for new combo */
+@keyframes comboBounce {
+    0% { transform: translate(-50%, -50%) scale(0.5); }
+    50% { transform: translate(-50%, -50%) scale(1.3); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.quiz-combo.pop {
+    animation: comboBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* --- Progress Path (Mini-Map) --- */
+.quiz-progress-path {
+    margin-bottom: 20px;
+    position: relative;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.path-track {
+    width: 90%;
+    height: 20px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.path-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: var(--text-dark);
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.path-stop {
+    width: 24px;
+    height: 24px;
+    background-color: var(--bg-dark);
+    border: 2px solid var(--text-dark);
+    border-radius: 50%;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--secondary-pink);
+    transition: all 0.3s;
+}
+
+.path-stop.completed {
+    background-color: var(--primary-rose);
+    color: var(--text-light);
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 5px var(--accent-gold);
+}
+
+.harry-walker {
+    position: absolute;
+    top: -15px; /* Adjust based on character size */
+    left: 0%;
+    font-size: 24px;
+    z-index: 3;
+    transition: left 0.8s ease-in-out;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.5));
+}
+
+/* Little jump animation when walking */
+@keyframes walkJump {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.harry-walker.walking {
+    animation: walkJump 0.4s ease-in-out 2;
+}
+
+.path-percentage {
+    margin-top: 10px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--text-light);
+    opacity: 0.8;
+}
+
+/* --- Game Over Overlay --- */
+.game-over-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Darker for dramatic effect */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.5s;
+    backdrop-filter: blur(3px);
+}
+
+.game-over-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.game-over-box {
+    background-color: var(--bg-dark);
+    border: 4px solid #F44336; /* Red border */
+    padding: 30px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 0 20px rgba(244, 67, 54, 0.5);
+    transform: scale(1);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.game-over-overlay.hidden .game-over-box {
+    transform: scale(0.8);
+}
+
+.game-over-title {
+    font-family: 'Press Start 2P', monospace;
+    color: #F44336;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 0 #000;
+    letter-spacing: 2px;
+}
+
+.game-over-msg {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: var(--text-light);
+}
+
+.game-over-stats {
+    font-size: 18px;
+    color: var(--secondary-pink);
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+
+/* --- Flash Screen Effect (Red for damage) --- */
+@keyframes flashRed {
+    0% { background-color: transparent; }
+    50% { background-color: rgba(244, 67, 54, 0.4); }
+    100% { background-color: transparent; }
+}
+
+.flash-damage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    animation: flashRed 0.3s;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 400px) {
+    .quiz-hud {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .quiz-combo {
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: translate(0, 0);
+        margin-top: 5px;
+    }
+    
+    .quiz-combo.hidden {
+        position: absolute;
+    }
+    
+    @keyframes comboBounce {
+        0% { transform: scale(0.5); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+    }
+}

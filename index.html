@@ -9,10 +9,37 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/transitions.css">
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/karaoke.css">
+    <link rel="stylesheet" href="css/quiz-hud.css">
 </head>
 <body>
     <!-- Floating Hearts Background -->
     <div class="hearts-bg" id="hearts-bg"></div>
+
+    <!-- Transition Overlay -->
+    <div id="transition-overlay">
+        <div id="t-bg" class="t-background"></div>
+        <div id="t-character-container" class="t-character-container">
+            <div id="t-speech-bubble" class="t-speech-bubble"></div>
+            <div id="t-sprite" class="t-sprite t-sprite-base"></div>
+        </div>
+        <div id="t-text" class="t-loading-text">LEVEL 1 COMPLETE<span class="t-blink">_</span></div>
+        <button class="t-btn-skip" onclick="skipTransition()">SKIP ►</button>
+    </div>
+
+    <!-- Treasure Map Overlay -->
+    <div id="map-overlay">
+        <div class="map-container">
+            <div class="map-title">✦ TREASURE MAP ✦</div>
+            <div class="map-path">
+                <div class="map-path-bg"></div>
+                <div class="map-path-fill"></div>
+            </div>
+            <div class="map-pins"></div>
+        </div>
+    </div>
 
     <!-- Progress Bar -->
     <div class="progress-container" id="progress-container">
@@ -22,6 +49,7 @@
         <div class="pixel-heart" data-step="3"></div>
         <div class="pixel-heart" data-step="4"></div>
         <div class="pixel-heart" data-step="5"></div>
+        <div class="pixel-heart" data-step="6"></div>
     </div>
 
     <!-- ==================== LANDING PAGE ==================== -->
@@ -34,6 +62,7 @@
                 </h1>
             </div>
             <p class="landing-subtitle">A treasure hunt through our memories</p>
+            <p class="insert-coin">INSERT COIN TO PLAY...</p>
             
             <div class="countdown-container" id="countdown-container">
                 <p class="countdown-label">Your special day arrives in:</p>
@@ -76,6 +105,41 @@
             </div>
 
             <div class="puzzle-card pixel-box">
+                <!-- Quiz HUD (Heads-Up Display) -->
+                <div class="quiz-hud">
+                    <!-- Cuori / Vite -->
+                    <div class="quiz-lives" id="quiz-lives">
+                        <span class="life-heart full" id="heart-1">❤️</span>
+                        <span class="life-heart full" id="heart-2">❤️</span>
+                        <span class="life-heart full" id="heart-3">❤️</span>
+                        <span class="life-heart full" id="heart-4">❤️</span>
+                        <span class="life-heart full" id="heart-5">❤️</span>
+                    </div>
+                    <!-- Timer -->
+                    <div class="quiz-timer" id="quiz-timer">
+                        <div class="timer-bar-bg">
+                            <div class="timer-bar-fill" id="timer-bar-fill"></div>
+                        </div>
+                        <span class="timer-text" id="timer-text">15</span>
+                    </div>
+                    <!-- Combo -->
+                    <div class="quiz-combo hidden" id="quiz-combo">🔥 ×1</div>
+                </div>
+
+                <!-- Progress Path (mini-mappa di Harry) -->
+                <div class="quiz-progress-path" id="quiz-progress-path">
+                    <div class="path-track">
+                        <div class="path-line"></div>
+                        <div class="path-stop" data-q="1">1</div>
+                        <div class="path-stop" data-q="2">2</div>
+                        <div class="path-stop" data-q="3">3</div>
+                        <div class="path-stop" data-q="4">4</div>
+                        <div class="path-stop" data-q="5">🏆</div>
+                    </div>
+                    <div class="harry-walker" id="harry-walker" style="left: 0%;">🕺</div>
+                    <div class="path-percentage" id="path-percentage">0%</div>
+                </div>
+
                 <div class="quiz-container" id="quiz-container">
                     
                     <!-- Q1 -->
@@ -135,7 +199,7 @@
 
                 </div>
 
-                <div class="quiz-progress" style="margin-top:20px; font-size:16px;">
+                <div class="quiz-progress" style="margin-top:20px; font-size:16px; color:white; text-shadow:1px 1px 0 #000;">
                     Question <span id="quiz-current-q">1</span> of 5
                 </div>
 
@@ -145,7 +209,7 @@
             <div class="reward-container hidden" id="reward-1">
                 <div class="reward-photo-frame">
                     <!-- ✏️ CUSTOMIZE: Replace with your photo -->
-                    <img src="https://via.placeholder.com/250" alt="Our memory" class="reward-photo" id="reward-photo-1">
+                    <img src="images/reward-1.jpg" alt="Our memory" class="reward-photo" id="reward-photo-1">
                 </div>
                 <!-- ✏️ CUSTOMIZE: Change the message below -->
                 <p class="reward-message" id="reward-msg-1">You know your shows, but you know my heart even better. 💕</p>
@@ -175,7 +239,7 @@
             <div class="reward-container hidden" id="reward-2">
                 <div class="reward-photo-frame">
                     <!-- ✏️ CUSTOMIZE: This shows the complete jigsaw photo -->
-                    <img src="https://via.placeholder.com/250" alt="Our memory" class="reward-photo" id="reward-photo-2">
+                    <img src="images/reward-2.jpg" alt="Our memory" class="reward-photo" id="reward-photo-2">
                 </div>
                 <p class="reward-message" id="reward-msg-2">Every piece of my life is better with you in it. 🧩💕</p>
                 <button class="btn-pixel gold" onclick="goToStage(3)">
@@ -206,7 +270,7 @@
 
             <div class="reward-container hidden" id="reward-3">
                 <div class="reward-photo-frame">
-                    <img src="https://via.placeholder.com/250" alt="Our memory" class="reward-photo" id="reward-photo-3">
+                    <img src="images/reward-3.jpg" alt="Our memory" class="reward-photo" id="reward-photo-3">
                 </div>
                 <p class="reward-message" id="reward-msg-3">Some memories are worth holding onto forever. This is one of them. 🃏💕</p>
                 <button class="btn-pixel gold" onclick="goToStage(4)">
@@ -228,7 +292,7 @@
             <div class="puzzle-card pixel-box">
                 <div class="scratch-container" id="scratch-wrapper">
                     <!-- ✏️ CUSTOMIZE: Replace with Harry Styles / 1D photo -->
-                    <img src="https://via.placeholder.com/300" alt="Hidden memory" class="scratch-reveal" id="scratch-reveal">
+                    <img src="images/reward-4.jpg" alt="Hidden memory" class="scratch-reveal" id="scratch-reveal">
                     <canvas id="scratch-canvas"></canvas>
                 </div>
                 <p class="scratch-hint" id="scratch-hint" style="color:var(--text-dark); margin-top:10px;">Scratch the golden area above! ✨</p>
@@ -243,8 +307,26 @@
         </div>
     </section>
 
-    <!-- ==================== STAGE 5: GRAND FINALE ==================== -->
+    <!-- ==================== STAGE 5: KARAOKE ==================== -->
     <section class="stage" id="stage-5">
+        <div class="stage-content">
+            <div class="stage-header">
+                <span class="stage-number" style="font-family:'Press Start 2P'; font-size:12px; color:var(--accent-gold);">BONUS LEVEL</span>
+                <h2 class="stage-title">🎤 Karaoke Time!</h2>
+                <p class="stage-desc">Tap when lyrics hit the zone! No wrong answers — just vibes 🎵</p>
+            </div>
+
+            <div class="karaoke-stage">
+                <div class="karaoke-score">0</div>
+                <div class="karaoke-combo"></div>
+                <div class="karaoke-track"></div>
+                <div class="karaoke-hit-zone"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== STAGE 6: GRAND FINALE ==================== -->
+    <section class="stage" id="stage-6">
         <div class="stage-content finale-content">
             <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:99;"></canvas>
             
@@ -257,14 +339,24 @@
                 <!-- Photos populated by JS -->
             </div>
 
-            <div class="finale-message pixel-box">
-                <!-- ✏️ CUSTOMIZE: Final dedication message -->
-                <p class="dedication-text" id="dedication-text" style="font-size:28px; line-height:1.4;">
-                    From "Story of My Life" to "Sign of the Times", I love you more every day. 
-                    And if you didn't smile at least once playing this... that's some white shit. 😂
-                    <br><br>Happy 22nd birthday, my love! 🎂💕
-                </p>
-                <p class="dedication-signature" style="text-align:right; margin-top:20px; color:var(--primary-rose);">— Player 1 ❤️</p>
+            <!-- Animated Envelope -->
+            <div class="envelope-container" id="envelope-container">
+                <div class="envelope">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-body">
+                        <div class="wax-seal">💕</div>
+                    </div>
+                    <div class="letter" id="letter-content">
+                        <div class="letter-inner">
+                            <p class="dedication-text" id="dedication-text" style="font-size:22px; line-height:1.6;">
+                                From "Story of My Life" to "Sign of the Times", I love you more every day. 
+                                And if you didn't smile at least once playing this... that's some white shit. 😂
+                                <br><br>Happy 22nd birthday, my love! 🎂💕
+                            </p>
+                            <p class="dedication-signature" style="text-align:right; margin-top:20px; color:var(--primary-rose);">— Player 1 ❤️</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="finale-actions" style="margin-top:40px;">
@@ -275,17 +367,37 @@
         </div>
     </section>
 
-    <!-- Audio Player -->
-    <button class="audio-toggle" id="audio-toggle" onclick="toggleAudio()" title="Toggle music">
-        🔇
-    </button>
-    <audio id="bg-music" loop>
-        <!-- ✏️ CUSTOMIZE: Place an 8-bit harry styles mp3 in the sounds folder and update path -->
-        <source src="sounds/harry_styles_8bit.mp3" type="audio/mpeg">
-    </audio>
+    <!-- Music Player (Top Right) -->
+    <div class="music-player pixel-box" id="music-player">
+        <div class="marquee-container">
+            <marquee class="track-name" id="track-name" scrollamount="4">1. As It Was (8-bit) - Harry Styles</marquee>
+        </div>
+        <div class="music-controls">
+            <button class="btn-pixel-small" id="audio-toggle" onclick="toggleAudio()" title="Play/Pause">🔇</button>
+            <button class="btn-pixel-small" id="next-track" onclick="nextTrack()" title="Next Song">⏭️</button>
+        </div>
+    </div>
+    <audio id="bg-music"></audio>
 
+    <!-- Game Over Overlay -->
+    <div class="game-over-overlay hidden" id="game-over-overlay">
+        <div class="game-over-box pixel-box">
+            <h2 class="game-over-title">GAME OVER</h2>
+            <p class="game-over-msg" id="game-over-msg">You ran out of lives!</p>
+            <div class="game-over-stats" id="game-over-stats"></div>
+            <button class="btn-pixel gold" onclick="restartQuizFromGameOver()">
+                CONTINUE? ►
+            </button>
+        </div>
+    </div>
+
+    <script src="js/sfx.js"></script>
+    <script src="js/particles.js"></script>
     <script src="js/countdown.js"></script>
     <script src="js/confetti.js"></script>
+    <script src="js/transitions.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/karaoke.js"></script>
     <script src="js/puzzles.js"></script>
     <script src="js/app.js"></script>
 </body>

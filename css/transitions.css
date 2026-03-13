@@ -1,0 +1,370 @@
+/* =========================================================================
+   transitions.css - 8-Bit Transition Scenes
+   ========================================================================= */
+
+#transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background-color: #000;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    /* Retro CRT scanline effect */
+    background-image: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 4px;
+}
+
+#transition-overlay.active {
+    display: flex;
+    animation: fadeTransitionIn 0.5s forwards;
+}
+
+#transition-overlay.fade-out {
+    animation: fadeTransitionOut 0.5s forwards;
+}
+
+@keyframes fadeTransitionIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@keyframes fadeTransitionOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Base Scene Background */
+.t-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Scene 1: Meadow */
+.bg-meadow {
+    background-color: #87CEEB; /* Sky blue */
+    background-image: 
+        linear-gradient(to top, #4CAF50 30%, transparent 30%), /* Grass floor */
+        /* Clouds */
+        radial-gradient(circle at 20% 20%, #fff 15px, transparent 15px),
+        radial-gradient(circle at 25% 15%, #fff 20px, transparent 20px),
+        /* Sun */
+        radial-gradient(circle at 90% 10%, #D4AF37 30px, transparent 30px);
+}
+
+/* Scene 2: Concert */
+.bg-concert {
+    background-color: #1a0a12;
+    background-image: 
+        linear-gradient(to top, #2d131f 20%, transparent 20%),
+        /* Spotlights */
+        conic-gradient(from 180deg at 30% 0%, rgba(255, 255, 255, 0.1) 15deg, transparent 15deg),
+        conic-gradient(from 180deg at 70% 0%, rgba(255, 255, 255, 0.1) 15deg, transparent 15deg),
+        /* Crowd Silhouette */
+        repeating-linear-gradient(90deg, #000 0, #000 10px, transparent 10px, transparent 20px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 40px;
+    background-position: 0 0, 0 0, 0 0, 0 100%;
+}
+
+/* Scene 3: Sunset Landscape */
+.bg-sunset {
+    background: linear-gradient(to bottom, #FF7E5F, #FEB47B 70%, #2c3e50 70%); 
+    /* Adding stars */
+    background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 5px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 3px);
+    background-size: 150px 150px, 200px 200px;
+    background-position: 0 0, 50px 100px;
+}
+
+/* Scene 4: Stadium  */
+.bg-stadium {
+    background-color: #0c0518;
+    background-image: 
+        linear-gradient(to top, #3b3a45 30%, transparent 30%), 
+        /* Flashing lights */
+        radial-gradient(circle at 50% 10%, #fff 2px, transparent 2px);
+    background-size: 100% 100%, 80px 80px;
+    animation: stadiumFlashes 0.5s infinite steps(2);
+}
+
+@keyframes stadiumFlashes {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 0 0, 40px 40px; }
+}
+
+
+/* --- The Pixel Harry Sprite --- */
+/* We build an 8-bit character mostly via box shadows for true pixelness, 
+   but wrapped in a sliding container */
+
+.t-character-container {
+    width: 64px;
+    height: 64px;
+    position: absolute;
+    bottom: 25%; /* Walk on the 'floor' */
+    transform-origin: bottom center;
+    /* Scale up 3x to make it chunky retro */
+    transform: scale(3) translateX(-150vw); 
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+/* The actual sprite box. 
+   We'll use a relatively simple 16x32 silhouette */
+.t-sprite {
+    width: 4px; /* base pixel size */
+    height: 4px;
+    background-color: transparent;
+    position: relative;
+    /* Brown Hair, Face, White Shirt, Pink Pants */
+}
+
+/* 
+  Harry Palette (Detailed):
+  Hair: #4a2e1b
+  Skin: #f1c27d
+  Shirt: #ffffff
+  Pants (High-waisted Wide Leg): #BA4A76 (Rose)
+  Boots: #222222
+  Boa (Pink/Feathered): #ff6eb4
+  Mic Stand: #aaaaaa
+  Rings/Tattoos (accents): #111
+*/
+
+.t-sprite-base {
+    box-shadow: 
+        /* --- HEAD & HAIR (Voluminous Curls) --- */
+        -4px -28px 0 #4a2e1b, 0 -28px 0 #4a2e1b, 4px -28px 0 #4a2e1b, 8px -28px 0 #4a2e1b,
+        -8px -24px 0 #4a2e1b, -4px -24px 0 #4a2e1b, 0 -24px 0 #4a2e1b, 4px -24px 0 #4a2e1b, 8px -24px 0 #4a2e1b, 12px -24px 0 #4a2e1b,
+        -8px -20px 0 #4a2e1b, -4px -20px 0 #f1c27d, 0 -20px 0 #f1c27d, 4px -20px 0 #f1c27d, 8px -20px 0 #f1c27d, 12px -20px 0 #4a2e1b, 16px -20px 0 #4a2e1b,
+        -4px -16px 0 #4a2e1b, 0 -16px 0 #f1c27d, 4px -16px 0 #f1c27d, 8px -16px 0 #f1c27d, 12px -16px 0 #4a2e1b,
+        
+        /* --- FEATHER BOA (Wrapping around neck) --- */
+        -8px -12px 0 #ff6eb4, -4px -12px 0 #ff6eb4, 0 -12px 0 #ff6eb4, 4px -12px 0 #ff6eb4, 8px -12px 0 #ff6eb4, 12px -12px 0 #ff6eb4,
+        
+        /* --- TORSO & ARMS (Unbuttoned shirt showing tattoos) --- */
+        -8px -8px 0 #f1c27d, -4px -8px 0 #ffffff, 0 -8px 0 #f1c27d, 4px -8px 0 #ffffff, 8px -8px 0 #f1c27d, /* Arms and chest split */
+        -8px -4px 0 #f1c27d, -4px -4px 0 #ffffff, 0 -4px 0 #f1c27d, 4px -4px 0 #ffffff, 8px -4px 0 #f1c27d, /* Tattoo peek `0 -4px` */
+        
+        /* Arm accents (Rings/Tattoos on hands) */
+        -12px -4px 0 #111, 12px -4px 0 #111,
+        
+        /* --- HIGH WAISTED PANTS (Suspenders/Belt detail) --- */
+        -4px 0 0 #BA4A76, 0 0 0 #222, 4px 0 0 #BA4A76, /* Belt buckle */
+        -4px 4px 0 #BA4A76, 0 4px 0 #BA4A76, 4px 4px 0 #BA4A76,
+        -8px 8px 0 #BA4A76, -4px 8px 0 #BA4A76, 0 8px 0 #BA4A76, 4px 8px 0 #BA4A76, 8px 8px 0 #BA4A76, /* Flared out */
+        
+        /* --- BOOTS --- */
+        -8px 12px 0 #222, -4px 12px 0 #222, 4px 12px 0 #222, 8px 12px 0 #222,
+        
+        /* --- MIC STAND (Optional prop on right) --- */
+        20px -16px 0 #111, 20px -12px 0 #aaa, 20px -8px 0 #aaa, 20px -4px 0 #aaa, 20px 0 0 #aaa, 20px 4px 0 #aaa, 20px 8px 0 #aaa, 16px 12px 0 #333, 20px 12px 0 #333, 24px 12px 0 #333;
+}
+
+/* Walking state 1: Left leg forward, Right leg back */
+.t-sprite-walk-1 {
+    box-shadow: 
+        /* --- HEAD & HAIR (Same but shifted up 1px for bounce effect - represented by moving shadow logic) --- */
+        -4px -29px 0 #4a2e1b, 0 -29px 0 #4a2e1b, 4px -29px 0 #4a2e1b, 8px -29px 0 #4a2e1b,
+        -8px -25px 0 #4a2e1b, -4px -25px 0 #4a2e1b, 0 -25px 0 #4a2e1b, 4px -25px 0 #4a2e1b, 8px -25px 0 #4a2e1b, 12px -25px 0 #4a2e1b,
+        -8px -21px 0 #4a2e1b, -4px -21px 0 #f1c27d, 0 -21px 0 #f1c27d, 4px -21px 0 #f1c27d, 8px -21px 0 #f1c27d, 12px -21px 0 #4a2e1b, 16px -21px 0 #4a2e1b,
+        -4px -17px 0 #4a2e1b, 0 -17px 0 #f1c27d, 4px -17px 0 #f1c27d, 8px -17px 0 #f1c27d, 12px -17px 0 #4a2e1b,
+        
+        /* --- FEATHER BOA (Swinging back) --- */
+        -12px -13px 0 #ff6eb4, -8px -13px 0 #ff6eb4, -4px -13px 0 #ff6eb4, 0 -13px 0 #ff6eb4, 4px -13px 0 #ff6eb4, 8px -13px 0 #ff6eb4,
+        
+        /* --- TORSO & ARMS (Right arm forward, Left arm back) --- */
+        12px -9px 0 #f1c27d, /* Arm forward w/ ring */
+        -4px -9px 0 #ffffff, 0 -9px 0 #f1c27d, 4px -9px 0 #ffffff, 
+        -4px -5px 0 #ffffff, 0 -5px 0 #f1c27d, 4px -5px 0 #ffffff,
+        -12px -5px 0 #f1c27d, /* Arm back */
+        
+        /* --- HIGH WAISTED PANTS --- */
+        -4px -1px 0 #BA4A76, 0 -1px 0 #222, 4px -1px 0 #BA4A76,
+        -4px 3px 0 #BA4A76, 0 3px 0 #BA4A76, 4px 3px 0 #BA4A76,
+        -12px 7px 0 #BA4A76, -8px 7px 0 #BA4A76, /* Left leg spread back */
+        8px 7px 0 #BA4A76, 12px 7px 0 #BA4A76, /* Right leg spread forward */
+        
+        /* --- BOOTS --- */
+        -16px 11px 0 #222, -12px 11px 0 #222,
+        12px 11px 0 #222, 16px 11px 0 #222;
+}
+
+/* Walking state 2: Right leg forward, Left leg back */
+.t-sprite-walk-2 {
+    box-shadow: 
+        /* --- HEAD & HAIR (Bounce down slightly) --- */
+        -4px -27px 0 #4a2e1b, 0 -27px 0 #4a2e1b, 4px -27px 0 #4a2e1b, 8px -27px 0 #4a2e1b,
+        -8px -23px 0 #4a2e1b, -4px -23px 0 #4a2e1b, 0 -23px 0 #4a2e1b, 4px -23px 0 #4a2e1b, 8px -23px 0 #4a2e1b, 12px -23px 0 #4a2e1b,
+        -8px -19px 0 #4a2e1b, -4px -19px 0 #f1c27d, 0 -19px 0 #f1c27d, 4px -19px 0 #f1c27d, 8px -19px 0 #f1c27d, 12px -19px 0 #4a2e1b, 16px -19px 0 #4a2e1b,
+        -4px -15px 0 #4a2e1b, 0 -15px 0 #f1c27d, 4px -15px 0 #f1c27d, 8px -15px 0 #f1c27d, 12px -15px 0 #4a2e1b,
+        
+        /* --- FEATHER BOA (Swinging forward) --- */
+        -4px -11px 0 #ff6eb4, 0 -11px 0 #ff6eb4, 4px -11px 0 #ff6eb4, 8px -11px 0 #ff6eb4, 12px -11px 0 #ff6eb4, 16px -11px 0 #ff6eb4,
+        
+        /* --- TORSO & ARMS (Left arm forward, Right arm back) --- */
+        -12px -7px 0 #f1c27d, /* Arm back */
+        -4px -7px 0 #ffffff, 0 -7px 0 #f1c27d, 4px -7px 0 #ffffff, 
+        -4px -3px 0 #ffffff, 0 -3px 0 #f1c27d, 4px -3px 0 #ffffff,
+        12px -3px 0 #f1c27d, /* Arm forward w/ ring */
+        
+        /* --- HIGH WAISTED PANTS --- */
+        -4px 1px 0 #BA4A76, 0 1px 0 #222, 4px 1px 0 #BA4A76,
+        -4px 5px 0 #BA4A76, 0 5px 0 #BA4A76, 4px 5px 0 #BA4A76,
+        8px 9px 0 #BA4A76, 12px 9px 0 #BA4A76, /* Left leg spread forward */
+        -12px 9px 0 #BA4A76, -8px 9px 0 #BA4A76, /* Right leg spread back */
+        
+        /* --- BOOTS --- */
+        12px 13px 0 #222, 16px 13px 0 #222,
+        -16px 13px 0 #222, -12px 13px 0 #222;
+}
+
+/* RPG Dialog Box Style */
+.t-speech-bubble {
+    position: absolute;
+    top: -85px; /* Higher up */
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: rgba(26, 10, 18, 0.95); /* Dark theme */
+    color: #fff;
+    padding: 12px 15px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px; /* Bigger */
+    line-height: 1.6;
+    border: 4px solid #fff;
+    box-shadow: 
+        inset -4px -4px 0px rgba(0,0,0,0.5),
+        4px 4px 0px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    white-space: normal; /* Allow wrapping */
+    width: 220px;
+    max-width: 80vw;
+    word-wrap: break-word;
+    z-index: 10;
+}
+
+/* [HARRY] Name Tag */
+.t-speech-bubble::before {
+    content: '[HARRY]';
+    position: absolute;
+    top: -18px;
+    left: 0;
+    color: var(--accent-gold);
+    font-size: 8px;
+    text-shadow: 2px 2px 0 #000;
+}
+
+/* Tail of speech bubble */
+.t-speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 10px;
+    border-width: 4px 4px 0 0;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+}
+.t-speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 9px;
+    border-width: 6px 6px 0 0;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+    z-index: -1;
+}
+
+.t-speech-bubble.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* --- CSS Animations for the Walk Cycle --- */
+
+/* 1. Walk Across Left-to-Right */
+@keyframes walkLtr {
+    0% { transform: scale(3) translateX(-30vw); }
+    100% { transform: scale(3) translateX(0); } /* Center stage */
+}
+
+/* 2. Walk Across Right-to-Left */
+@keyframes walkRtl {
+    0% { transform: scale3d(-3, 3, 1) translateX(-30vw); } /* Flipped X */
+    100% { transform: scale3d(-3, 3, 1) translateX(0); }
+}
+
+/* 3. The Sprite Leg Toggle (10fps retro style) */
+@keyframes spriteCycle {
+    0%, 49% { /* Copy base box-shadow here via JS classes */ }
+    50%, 100% { /* Copy walk box-shadow via JS toggle class */ }
+}
+
+/* Action animations added via JS classes when center is reached */
+.action-wave { animation: pulseSprite 0.3s 2 alternate; }
+.action-jump { animation: jumpSprite 0.5s ease-out; }
+.action-bow  { animation: bowSprite 1s forwards; }
+
+@keyframes bowSprite {
+    50% { transform: scale(3) rotate(15deg); }
+    100% { transform: scale(3) rotate(0deg); }
+}
+@keyframes jumpSprite {
+    50% { transform: scale(3) translateY(-20px); }
+    100% { transform: scale(3) translateY(0); }
+}
+@keyframes pulseSprite {
+    100% { transform: scale(3.2); }
+}
+
+/* Text Overlays */
+.t-loading-text {
+    position: absolute;
+    bottom: 50px;
+    font-size: 16px; /* Press Start 2P */
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+    text-align: center;
+}
+
+.t-blink {
+    animation: blinkCursor 1s infinite steps(2, start);
+}
+@keyframes blinkCursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Skip Button */
+.t-btn-skip {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: transparent;
+    color: var(--secondary-pink);
+    border: none;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+.t-btn-skip:hover {
+    color: #fff;
+    opacity: 1;
+}

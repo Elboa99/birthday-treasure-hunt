@@ -162,7 +162,28 @@ button {
 .stage.active {
     display: flex;
     animation: fadeIn 0.5s ease;
+    position: relative;
 }
+
+/* Background Image Overlays for Stages */
+.stage::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15; /* Subtle enough not to distract */
+    z-index: -1;
+    image-rendering: pixelated;
+}
+
+#stage-1::before { background-image: url('../images/bg-quiz.png'); }
+#stage-2::before { background-image: url('../images/bg-jigsaw.png'); }
+#stage-3::before { background-image: url('../images/bg-memory.png'); }
+#stage-4::before { background-image: url('../images/bg-scratch.png'); }
 
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -211,9 +232,49 @@ button {
     max-width: 800px;
     width: 100%;
     margin-top: 60px; /* Account for fixed progress bar */
+    z-index: 10;
+    position: relative;
+}
+
+/* --- Floating Particles Background --- */
+.hearts-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+.floating-particle {
+    position: absolute;
+    bottom: -100px;
+    opacity: 0.6;
+    animation-name: floatUp;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+@keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.8; }
+    90%  { opacity: 0.8; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
 }
 
 /* --- Landing Page specific --- */
+.insert-coin {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    color: var(--primary-rose);
+    text-shadow: 2px 2px 0 var(--text-dark);
+    margin: 20px 0;
+    animation: blinkText 1s infinite alternate;
+}
+@keyframes blinkText {
+    0%   { opacity: 1; }
+    100% { opacity: 0.2; }
+}
 .landing-title {
     font-size: 40px;
     color: var(--accent-gold);
@@ -254,10 +315,16 @@ button {
 /* --- Puzzle Elements --- */
 .stage-title {
     color: var(--primary-rose);
-    text-shadow: 2px 2px 0 var(--text-dark);
+    text-shadow: 2px 2px 0 var(--text-dark), 0 0 10px rgba(255,255,255,0.3);
     font-size: 24px;
     margin-bottom: 10px;
 }
+
+.stage-desc {
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+}
+
 
 .pix-input {
     font-family: 'VT323', monospace;
@@ -321,7 +388,8 @@ button {
 }
 
 .reward-message {
-    color: var(--text-dark);
+    color: #fff; /* Changed to white for better contrast */
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
     font-size: 32px; /* VT323 needs to be large */
     line-height: 1.2;
     margin: 20px 0;
@@ -401,6 +469,134 @@ button {
     40%, 60% { transform: translate3d(8px, 0, 0); }
 }
 
+/* --- Finale Gallery --- */
+.finale-gallery {
+    margin: 30px 0;
+    width: 100%;
+}
+.photo-carousel {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.carousel-photo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 
+        -2px 0 0 0 var(--text-dark),
+        2px 0 0 0 var(--text-dark),
+        0 -2px 0 0 var(--text-dark),
+        0 2px 0 0 var(--text-dark),
+        4px 4px 0 rgba(0,0,0,0.5);
+    opacity: 0;
+    transform: scale(0.8) rotate(var(--rot, -5deg));
+}
+
+/* Give random rotations to carousel photos manually using nth-child */
+.carousel-photo:nth-child(even) { --rot: 5deg; }
+.carousel-photo:nth-child(3n) { --rot: -8deg; }
+.carousel-photo:nth-child(4n) { --rot: 8deg; }
+
+.pop-in {
+    animation: popInPhoto 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popInPhoto {
+    100% { opacity: 1; transform: scale(1) rotate(var(--rot)); }
+}
+
+/* =========================================================================
+   Animated Envelope & Letter
+   ========================================================================= */
+.envelope-container {
+    perspective: 800px;
+    margin: 30px auto;
+    width: 280px;
+}
+
+.envelope {
+    position: relative;
+    width: 280px;
+    height: 180px;
+    margin: 0 auto;
+}
+
+.envelope-body {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 130px;
+    background: #f5e6d0;
+    border: 4px solid var(--text-dark);
+    box-shadow:
+        inset 0 -20px 30px rgba(0,0,0,0.05),
+        4px 4px 0 rgba(0,0,0,0.2);
+    z-index: 2;
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0; height: 0;
+    border-left: 140px solid transparent;
+    border-right: 140px solid transparent;
+    border-top: 80px solid #e8d5b8;
+    z-index: 3;
+    transform-origin: top center;
+    animation: openFlap 1s ease-out 1.5s forwards;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+}
+
+.wax-seal {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    z-index: 4;
+    animation: sealBounce 0.5s ease-out 1s forwards;
+}
+
+@keyframes openFlap {
+    0% { transform: rotateX(0deg); }
+    100% { transform: rotateX(180deg); opacity: 0.3; }
+}
+
+@keyframes sealBounce {
+    0% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.3); }
+    100% { transform: translateX(-50%) scale(0); opacity: 0; }
+}
+
+.letter {
+    position: absolute;
+    bottom: 5px;
+    left: 5%;
+    width: 90%;
+    background: #fff;
+    border: 3px solid var(--text-dark);
+    padding: 20px 15px;
+    z-index: 1;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    animation: slideLetterUp 1.2s ease-out 2.5s forwards;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.letter-inner {
+    color: var(--text-dark);
+}
+
+@keyframes slideLetterUp {
+    0% { max-height: 0; opacity: 0; transform: translateY(0); }
+    100% { max-height: 500px; opacity: 1; transform: translateY(-160px); }
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
     .landing-title { font-size: 28px; }
@@ -408,4 +604,70 @@ button {
     .countdown-unit { min-width: 70px; padding: 10px; }
     .countdown-number { font-size: 24px; }
     .countdown-text { font-size: 18px; }
+}
+
+/* Music Player (Responsive Top Right) */
+.music-player {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--bg-dark);
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+    width: 200px;
+}
+.marquee-container {
+    width: 100%;
+    overflow: hidden;
+    background: #000;
+    padding: 4px;
+    border: 2px solid var(--accent-gold);
+}
+.track-name {
+    font-family: 'Press Start 2P', monospace;
+    color: #FFD1DC; /* Changed to light pink for visibility */
+    font-size: 10px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-shadow: 1px 1px 0 #000;
+}
+.music-controls {
+    display: flex;
+    gap: 15px;
+}
+.btn-pixel-small {
+    font-family: 'Press Start 2P', monospace;
+    background: var(--primary-rose);
+    color: white;
+    border: 3px solid var(--primary-pink);
+    padding: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 
+        -2px 0 0 0 var(--text-dark),
+        2px 0 0 0 var(--text-dark),
+        0 -2px 0 0 var(--text-dark),
+        0 2px 0 0 var(--text-dark);
+}
+.btn-pixel-small:hover, .btn-pixel-small:active {
+    transform: translateY(2px);
+}
+@media (max-width: 600px) {
+    .music-player {
+        top: 10px;
+        right: 10px;
+        width: 130px;
+        padding: 5px;
+    }
+    .track-name {
+        font-size: 8px;
+    }
+    .btn-pixel-small {
+        font-size: 12px;
+        padding: 3px;
+    }
 }
