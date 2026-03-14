@@ -421,78 +421,105 @@ function restartQuizFromGameOver() {
 // =========================================================================
 const jigsawContainer = document.getElementById('jigsaw-container');
 let draggedPiece = null;
+let touchDraggedPiece = null;
+let originalParent = null;
 
-// Generate 9 pieces
+function shuffleArray(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+}
+
+function isSolvedOrder(arr) {
+    return arr.every((value, index) => value === index);
+}
+
 function initJigsaw() {
-    if(!jigsawContainer) return;
+    if (!jigsawContainer) return;
+
     jigsawContainer.innerHTML = '';
-    
+
     const imgSrc = "images/IMG_2199.jpeg";
     const img = new Image();
     img.src = imgSrc;
-    
-    img.onload = () => {
-        const aspect = img.width / img.height;
-        const containerWidth = 300;
-        const containerHeight = containerWidth / aspect;
-        
-        jigsawContainer.style.height = `${containerHeight}px`;
-        jigsawContainer.style.backgroundImage = `url("${imgSrc}")`;
-        jigsawContainer.style.backgroundSize = `${containerWidth}px ${containerHeight}px`;
-        
-        const pieceWidth = containerWidth / 3;
-        const pieceHeight = containerHeight / 3;
 
-        // Array 0-8 for 9 slots
-        const slots = [0,1,2,3,4,5,6,7,8];
-        const shuffled = [...slots].sort(() => Math.random() - 0.5);
-        
-        // Create grid slots
-        for(let i=0; i<9; i++) {
+    img.onload = () => {
+        const containerSize = 320;
+        const rows = 3;
+        const cols = 3;
+        const totalPieces = rows * cols;
+
+        const pieceWidth = containerSize / cols;
+        const pieceHeight = containerSize / rows;
+
+        jigsawContainer.style.width = `${containerSize}px`;
+        jigsawContainer.style.height = `${containerSize}px`;
+        jigsawContainer.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        jigsawContainer.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+        jigsawContainer.style.backgroundImage = 'none';
+
+        const correctIndexes = Array.from({ length: totalPieces }, (_, i) => i);
+        let shuffledIndexes = shuffleArray(correctIndexes);
+
+        // Evita che parta già risolto
+        while (isSolvedOrder(shuffledIndexes)) {
+            shuffledIndexes = shuffleArray(correctIndexes);
+        }
+
+        // Crea gli slot
+        for (let i = 0; i < totalPieces; i++) {
             const slot = document.createElement('div');
             slot.className = 'jigsaw-slot';
             slot.dataset.index = i;
             slot.style.width = `${pieceWidth}px`;
             slot.style.height = `${pieceHeight}px`;
-            slot.style.backgroundColor = 'rgba(0,0,0,0.7)';
-            slot.style.position = 'relative';
-            slot.addEventListener('dragover', e => e.preventDefault());
+
+            slot.addEventListener('dragover', (e) => e.preventDefault());
             slot.addEventListener('drop', handleDrop);
+
             jigsawContainer.appendChild(slot);
         }
-        
-        // Add pieces to random slots
-        const slotElements = jigsawContainer.querySelectorAll('.jigsaw-slot');
-        shuffled.forEach((pieceIndex, i) => {
+
+        const slotElements = [...jigsawContainer.querySelectorAll('.jigsaw-slot')];
+
+        // Crea i pezzi e li mette in slot random
+        shuffledIndexes.forEach((pieceIndex, i) => {
             const piece = document.createElement('div');
             piece.className = 'jigsaw-piece';
             piece.draggable = true;
             piece.dataset.correctIndex = pieceIndex;
+
             piece.style.width = `${pieceWidth}px`;
             piece.style.height = `${pieceHeight}px`;
-            piece.style.cursor = 'grab';
             piece.style.backgroundImage = `url("${imgSrc}")`;
-            piece.style.backgroundSize = `${containerWidth}px ${containerHeight}px`;
-            
-            const row = Math.floor(pieceIndex / 3);
-            const col = pieceIndex % 3;
+            piece.style.backgroundSize = `${containerSize}px ${containerSize}px`;
+
+            const row = Math.floor(pieceIndex / cols);
+            const col = pieceIndex % cols;
             piece.style.backgroundPosition = `-${col * pieceWidth}px -${row * pieceHeight}px`;
-            
-            piece.addEventListener('dragstart', function() {
+
+            piece.addEventListener('dragstart', function () {
                 draggedPiece = this;
-                setTimeout(() => this.style.opacity = '0.5', 0);
+                this.classList.add('dragging');
+                setTimeout(() => {
+                    this.style.opacity = '0.35';
+                }, 0);
             });
-            piece.addEventListener('dragend', function() {
+
+            piece.addEventListener('dragend', function () {
                 this.style.opacity = '1';
+                this.classList.remove('dragging');
                 draggedPiece = null;
                 checkJigsawComplete();
             });
 
-            // Touch support for dragging logic
-            piece.addEventListener('touchstart', handleTouchStart, {passive: false});
-            piece.addEventListener('touchmove', handleTouchMove, {passive: false});
+            piece.addEventListener('touchstart', handleTouchStart, { passive: false });
+            piece.addEventListener('touchmove', handleTouchMove, { passive: false });
             piece.addEventListener('touchend', handleTouchEnd);
-            
+
             slotElements[i].appendChild(piece);
         });
     };
@@ -500,38 +527,118 @@ function initJigsaw() {
 
 function handleDrop(e) {
     e.preventDefault();
-    if(!draggedPiece) return;
-    
-    // If dropping on another piece, swap them
-    if (this.firstChild) {
-        const parentOfDragged = draggedPiece.parentNode;
-        parentOfDragged.appendChild(this.firstChild);
+    if (!draggedPiece) return;
+
+    const targetSlot = this;
+    const sourceSlot = draggedPiece.parentNode;
+
+    if (!targetSlot || !sourceSlot || targetSlot === sourceSlot) return;
+
+    const targetPiece = targetSlot.firstElementChild;
+
+    if (targetPiece) {
+        sourceSlot.appendChild(targetPiece);
     }
-    this.appendChild(draggedPiece);
-    if(typeof SFX !== 'undefined') SFX.playBlip();
+
+    targetSlot.appendChild(draggedPiece);
+
+    if (typeof SFX !== 'undefined') SFX.playBlip();
+}
+
+function handleTouchStart(e) {
+    e.preventDefault();
+
+    touchDraggedPiece = this;
+    originalParent = this.parentNode;
+
+    const touch = e.touches[0];
+    const rect = this.getBoundingClientRect();
+
+    this.classList.add('dragging');
+    this.style.opacity = '0.8';
+    this.style.position = 'fixed';
+    this.style.left = `${touch.clientX - rect.width / 2}px`;
+    this.style.top = `${touch.clientY - rect.height / 2}px`;
+    this.style.zIndex = '9999';
+    this.style.pointerEvents = 'none';
+}
+
+function handleTouchMove(e) {
+    if (!touchDraggedPiece) return;
+    e.preventDefault();
+
+    const touch = e.touches[0];
+    const rect = touchDraggedPiece.getBoundingClientRect();
+
+    touchDraggedPiece.style.left = `${touch.clientX - rect.width / 2}px`;
+    touchDraggedPiece.style.top = `${touch.clientY - rect.height / 2}px`;
+}
+
+function handleTouchEnd(e) {
+    if (!touchDraggedPiece) return;
+
+    const piece = touchDraggedPiece;
+    const touch = e.changedTouches[0];
+
+    piece.style.pointerEvents = '';
+    piece.style.opacity = '1';
+    piece.style.position = 'relative';
+    piece.style.left = '0';
+    piece.style.top = '0';
+    piece.style.zIndex = '';
+    piece.classList.remove('dragging');
+
+    const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+    const targetSlot = dropTarget ? dropTarget.closest('.jigsaw-slot') : null;
+
+    if (targetSlot && originalParent) {
+        const targetPiece = targetSlot.firstElementChild;
+
+        if (targetPiece && targetPiece !== piece) {
+            originalParent.appendChild(targetPiece);
+        }
+
+        targetSlot.appendChild(piece);
+
+        if (typeof SFX !== 'undefined') SFX.playBlip();
+    } else if (originalParent) {
+        originalParent.appendChild(piece);
+    }
+
+    touchDraggedPiece = null;
+    originalParent = null;
+
+    checkJigsawComplete();
 }
 
 function checkJigsawComplete() {
-    let complete = true;
     const slots = document.querySelectorAll('.jigsaw-slot');
-    
-    slots.forEach(slot => {
-        const piece = slot.firstChild;
-        if (!piece || parseInt(slot.dataset.index) !== parseInt(piece.dataset.correctIndex)) {
+    let complete = true;
+
+    slots.forEach((slot) => {
+        const piece = slot.firstElementChild;
+        if (!piece || Number(slot.dataset.index) !== Number(piece.dataset.correctIndex)) {
             complete = false;
         }
     });
-    
-    if(complete) {
-        if(typeof SFX !== 'undefined') SFX.playLevelClear();
-        if(typeof confetti !== 'undefined') confetti({particleCount: 50, spread: 60, origin: {y: 0.6}});
-        document.querySelector('#stage-2 .puzzle-card').classList.add('hidden');
+
+    if (complete) {
+        if (typeof SFX !== 'undefined') SFX.playLevelClear();
+        if (typeof confetti !== 'undefined') {
+            confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
+        }
+
+        const puzzleCard = document.querySelector('#stage-2 .puzzle-card');
+        if (puzzleCard) puzzleCard.classList.add('hidden');
+
         revealReward(2);
     }
 }
 
-function resetJigsaw() { initJigsaw(); }
-// Init on load
+function resetJigsaw() {
+    initJigsaw();
+}
+
 document.addEventListener('DOMContentLoaded', initJigsaw);
 
 // =========================================================================

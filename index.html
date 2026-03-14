@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>22 Clues for You 💕</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
     <meta name="description" content="A special interactive treasure hunt for an amazing 22nd birthday">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,7 +44,7 @@
 
     <!-- Progress Bar -->
     <div class="progress-container" id="progress-container">
-        <div class="pixel-heart active" data-step="0"></div>
+        <div class="pixel-heart filled" data-step="0"></div>
         <div class="pixel-heart" data-step="1"></div>
         <div class="pixel-heart" data-step="2"></div>
         <div class="pixel-heart" data-step="3"></div>
@@ -340,53 +341,77 @@
         </div>
     </section>
 
-    <!-- ==================== STAGE 6: GRAND FINALE ==================== -->
-    <section class="stage" id="stage-6">
-        <div class="stage-content finale-content">
-            <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:99;"></canvas>
-            
-            <div class="finale-header" style="margin-bottom: 20px;">
-                <h2 class="landing-title" style="font-size:32px;">Happy 22nd Birthday!</h2>
-                <p class="finale-subtitle" style="font-size:28px; color:var(--accent-gold); margin-bottom: 10px;">YOU WIN THE GAME 🎉</p>
-                <!-- Dedicated container for stats to prevent overlap -->
-                <div id="finale-stats-container"></div>
+   <!-- ==================== STAGE 6: GRAND FINALE ==================== -->
+<section class="stage" id="stage-6">
+    <div class="stage-content finale-content">
+        <canvas id="confetti-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:99;"></canvas>
+
+        <div class="finale-header">
+            <h2 class="landing-title finale-title">Happy 22nd Birthday!</h2>
+            <p class="finale-subtitle">YOU WIN THE GAME 🎉</p>
+            <div id="finale-stats-container"></div>
+        </div>
+
+        <div class="finale-scene">
+            <!-- Polaroid sparse -->
+            <div class="polaroid-pixel polaroid-final p1 tilt-left">
+                <img src="images/IMG_0213.jpg" alt="Memory 1">
             </div>
 
-            <!-- Finale gallery removed -->
+            <div class="polaroid-pixel polaroid-final p2 tilt-right-soft">
+                <img src="images/IMG_0289.jpg" alt="Memory 2">
+            </div>
 
-            <!-- Animated Envelope -->
-            <div class="envelope-container" id="envelope-container" onclick="toggleEnvelope()">
-                <div class="envelope-wrapper">
-                    <!-- Flap is separate for better layering control -->
-                    <div class="envelope-flap" id="envelope-flap"></div>
-                    
-                    <div class="envelope-body">
-                        <div class="letter" id="letter-content">
-                            <div class="letter-inner">
-                                <div class="pixel-heart-deco"></div>
-                                <p class="dedication-text" id="dedication-text">
-                                    From "Story of My Life" to "Sign of the Times", I love you more every day. 
-                                    And if you didn't smile at least once playing this... sybau nigg.. scherzoo... that's some white shit. 😂/ Jokes asides sai che sono scemo e che a volte mi cringio però ily e spero che ti sia piaciutò sto giochino
-                                    <br><br>Happy 22nd birthday amorino gattino! 🎂💕
-                                </p>
-                                <p class="dedication-signature" style="opacity: 0; transition: opacity 1s ease;">— Player 1 ❤️</p>
+            <div class="polaroid-pixel polaroid-final p3 tilt-left-soft">
+                <img src="images/IMG_0761.jpg" alt="Memory 3">
+            </div>
+
+            <div class="polaroid-pixel polaroid-final p4 tilt-right">
+                <img src="images/IMG_1142.jpg" alt="Memory 4">
+            </div>
+
+            <div class="polaroid-pixel polaroid-final p5 tilt-left">
+                <img src="images/IMG_2199.jpeg" alt="Memory 5">
+            </div>
+
+            <div class="polaroid-pixel polaroid-final p6 tilt-right-soft">
+                <img src="images/IMG_2638.jpg" alt="Memory 6">
+            </div>
+
+            <!-- Busta centrale -->
+            <div class="finale-centerpiece">
+                <div class="envelope-container" id="envelope-container" onclick="toggleEnvelope()">
+                    <div class="envelope-wrapper">
+                        <div class="envelope-flap" id="envelope-flap"></div>
+
+                        <div class="envelope-body">
+                            <div class="letter" id="letter-content" onclick="event.stopPropagation()">
+                                <div class="letter-inner">
+                                    <div class="pixel-heart-deco"></div>
+                                    <p class="dedication-text" id="dedication-text">
+                                        From "Story of My Life" to "Sign of the Times", I love you more every day.
+                                        And if you didn't smile at least once playing this... sybau nigg.. scherzoo... that's some white shit. 😂 / Jokes asides sai che sono scemo e che a volte mi cringio però ily e spero che ti sia piaciutò sto giochino
+                                        <br><br>Happy 22nd birthday amorino gattino! 🎂💕
+                                    </p>
+                                    <p class="dedication-signature" style="opacity: 0; transition: opacity 1s ease;">— Player 1 ❤️</p>
+                                </div>
                             </div>
+                            <div class="envelope-front-shadow"></div>
                         </div>
-                        <div class="envelope-front-shadow"></div>
+
+                        <div class="wax-seal" id="wax-seal">💕</div>
                     </div>
-                    
-                    <div class="wax-seal" id="wax-seal">💕</div>
                 </div>
             </div>
-
-            <div class="finale-actions" style="margin-top:40px;">
-                <button class="btn-pixel gold" onclick="replayAdventure()">
-                    PLAY AGAIN
-                </button>
-            </div>
         </div>
-    </section>
 
+        <div class="finale-actions">
+            <button class="btn-pixel gold" onclick="replayAdventure()">
+                PLAY AGAIN
+            </button>
+        </div>
+    </div>
+</section>
     <!-- Music Player (Top Right) -->
     <div class="music-player pixel-box" id="music-player">
         <div class="marquee-container">

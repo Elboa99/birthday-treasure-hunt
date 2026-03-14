@@ -18,8 +18,8 @@ const progressHearts = document.querySelectorAll('.pixel-heart');
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    // Hide progress bar on landing page
-    document.getElementById('progress-container').style.display = 'none';
+    // Progress bar initialization
+    updateProgress();
 });
 
 function saveName() {
@@ -54,8 +54,6 @@ let currentTrackIndex = 0;
 
 // Start the adventure from landing page
 function startAdventure() {
-    // Show progress bar
-    document.getElementById('progress-container').style.display = 'block';
     goToStage(1);
     
     // Start tracking time
@@ -161,6 +159,9 @@ function executeGoToStage(stageIndex) {
         if(typeof startTimer === 'function' && currentQuestion === 1) {
             setTimeout(startTimer, 500);
         }
+    }
+    if (stageIndex === 2) {
+        if(typeof initJigsaw === 'function') initJigsaw();
     }
     if (stageIndex === 5) {
         if(typeof initKaraoke === 'function') {

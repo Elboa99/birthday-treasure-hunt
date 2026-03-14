@@ -8,7 +8,6 @@
 
 /* --- CSS Variables --- */
 :root {
-    /* Color Palette */
     --bg-dark: #1a0a12;
     --bg-light: #FFD1DC;
     --primary-rose: #BA4A76;
@@ -16,9 +15,8 @@
     --accent-gold: #D4AF37;
     --text-light: #FFF5F7;
     --text-dark: #2d131f;
-    
-    /* Pixel Border Helper */
-    --pixel-border: 
+
+    --pixel-border:
         -4px 0 0 0 var(--text-dark),
         4px 0 0 0 var(--text-dark),
         0 -4px 0 0 var(--text-dark),
@@ -42,7 +40,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-image: 
+    background-image:
         linear-gradient(rgba(186, 74, 118, 0.1) 1px, transparent 1px),
         linear-gradient(90deg, rgba(186, 74, 118, 0.1) 1px, transparent 1px);
     background-size: 20px 20px;
@@ -73,7 +71,7 @@ button {
     position: relative;
     max-width: 600px;
     width: 90%;
-    box-shadow: 
+    box-shadow:
         -4px 0 0 0 var(--text-dark),
         4px 0 0 0 var(--text-dark),
         0 -4px 0 0 var(--text-dark),
@@ -106,7 +104,7 @@ button {
     position: relative;
     margin: 10px;
     text-transform: uppercase;
-    box-shadow: 
+    box-shadow:
         inset -4px -4px 0px 0px rgba(0,0,0,0.3),
         inset 4px 4px 0px 0px rgba(255,255,255,0.4),
         -4px 0 0 0 var(--text-dark),
@@ -123,7 +121,7 @@ button {
 
 .btn-pixel:active {
     transform: translateY(4px);
-    box-shadow: 
+    box-shadow:
         inset 4px 4px 0px 0px rgba(0,0,0,0.3),
         -4px 0 0 0 var(--text-dark),
         4px 0 0 0 var(--text-dark),
@@ -136,6 +134,7 @@ button {
     background-color: var(--accent-gold);
     color: var(--text-dark);
 }
+
 .btn-pixel.gold:hover {
     background-color: #e6c245;
 }
@@ -145,6 +144,7 @@ button {
     display: none;
     flex: 1;
     width: 100%;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px 0;
@@ -171,6 +171,8 @@ button {
     image-rendering: pixelated;
 }
 
+#stage-name-input::before,
+#stage-landing::before { background-image: url('../images/bg-name.jpg'); opacity: 0.35; }
 #stage-1::before { background-image: url('../images/bg-quiz.png'); }
 #stage-2::before { background-image: url('../images/bg-jigsaw.png'); }
 #stage-3::before { background-image: url('../images/bg-memory.png'); }
@@ -178,8 +180,8 @@ button {
 #stage-5::before { background-image: url('../images/bg-quiz.png'); }
 #stage-6::before { background-image: url('../images/bg-quiz.png'); opacity: 0.1; }
 
-/* Stage 6 adjustment */
 #stage-6 {
+    min-height: 100vh;
     height: 100vh;
     overflow: hidden;
 }
@@ -191,14 +193,19 @@ button {
 
 /* --- Progress Bar (Pixel Hearts) --- */
 .progress-container {
-    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    min-height: 64px;
+    padding: 12px 16px;
     text-align: center;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 100;
-    background-color: rgba(26, 10, 18, 0.9);
+    background-color: rgba(26, 10, 18, 0.95);
     border-bottom: 4px solid var(--primary-rose);
 }
 
@@ -229,22 +236,42 @@ button {
     text-align: center;
     max-width: 800px;
     width: 100%;
-    margin-top: 60px;
+    margin: 80px auto 40px;
     z-index: 10;
     position: relative;
+    padding-bottom: 40px;
 }
 
-/* Finale content */
 .finale-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
     width: 100%;
-    max-width: 800px;
-    height: 100%;
+    max-width: 1280px;
+    height: calc(100vh - 80px);
+    margin: 80px auto 0;
+    padding: 10px 20px 20px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    align-items: start;
+    justify-items: center;
     position: relative;
+    overflow: hidden;
+}
+
+.finale-header {
+    position: relative;
+    z-index: 30;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.finale-title {
+    font-size: 28px !important;
+    margin-bottom: 10px;
+}
+
+.finale-subtitle {
+    font-size: 22px;
+    color: var(--accent-gold);
+    margin-bottom: 8px;
 }
 
 /* --- Floating Particles Background --- */
@@ -258,6 +285,7 @@ button {
     z-index: 0;
     overflow: hidden;
 }
+
 .floating-particle {
     position: absolute;
     bottom: -100px;
@@ -266,6 +294,7 @@ button {
     animation-timing-function: linear;
     animation-iteration-count: infinite;
 }
+
 @keyframes floatUp {
     0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
     10%  { opacity: 0.8; }
@@ -282,10 +311,12 @@ button {
     margin: 20px 0;
     animation: blinkText 1s infinite alternate;
 }
+
 @keyframes blinkText {
     0%   { opacity: 1; }
     100% { opacity: 0.2; }
 }
+
 .landing-title {
     font-size: 40px;
     color: var(--accent-gold);
@@ -334,7 +365,7 @@ button {
     margin: 20px 0;
     width: 250px;
     text-align: center;
-    box-shadow: 
+    box-shadow:
         -4px 0 0 0 #332111,
         4px 0 0 0 #332111,
         0 -4px 0 0 #332111,
@@ -368,7 +399,7 @@ button {
     background: #fff;
     border: none;
     color: var(--text-dark);
-    box-shadow: 
+    box-shadow:
         -4px 0 0 0 var(--text-dark),
         4px 0 0 0 var(--text-dark),
         0 -4px 0 0 var(--text-dark),
@@ -376,6 +407,7 @@ button {
         inset 4px 4px 0 rgba(0,0,0,0.1);
     outline: none;
 }
+
 .pix-input::placeholder {
     color: #999;
 }
@@ -387,12 +419,14 @@ button {
     gap: 10px;
     margin-top: 20px;
 }
+
 .quiz-opt {
     width: 100%;
     margin: 0;
     padding: 10px;
     font-size: 12px;
 }
+
 @media (max-width: 600px) {
     .quiz-options { grid-template-columns: 1fr; }
 }
@@ -403,7 +437,7 @@ button {
     padding: 12px 12px 40px 12px;
     margin: 20px auto;
     max-width: 300px;
-    box-shadow: 
+    box-shadow:
         -4px 0 0 0 var(--text-dark),
         4px 0 0 0 var(--text-dark),
         0 -4px 0 0 var(--text-dark),
@@ -427,24 +461,69 @@ button {
     margin: 20px 0;
 }
 
-/* --- Jigsaw & Memory Grids --- */
 .grid-container {
     display: grid;
-    gap: 4px;
+    gap: 0;
     margin: 20px auto;
     background: var(--text-dark);
     padding: 4px;
 }
+
 .grid-3x3 {
     grid-template-columns: repeat(3, 1fr);
     max-width: 320px;
 }
+
 .grid-4x3 {
     grid-template-columns: repeat(4, 1fr);
     max-width: 320px;
 }
+
 @media (max-width: 480px) {
     .grid-3x3, .grid-4x3 { max-width: 280px; }
+}
+
+/* --- Jigsaw Puzzle --- */
+.jigsaw-container {
+    display: grid;
+    gap: 0;
+    margin: 20px auto;
+    padding: 4px;
+    background: var(--text-dark);
+    width: 320px;
+    height: 320px;
+    max-width: 100%;
+    touch-action: none;
+}
+
+.jigsaw-slot {
+    position: relative;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.jigsaw-piece {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.jigsaw-piece.dragging {
+    transform: scale(1.03);
+    cursor: grabbing;
+}
+
+@media (max-width: 480px) {
+    .jigsaw-container {
+        width: 300px;
+        height: 300px;
+    }
 }
 
 /* Memory Card */
@@ -460,6 +539,7 @@ button {
     color: white;
     font-size: 24px;
 }
+
 .memory-card.flipped {
     background-color: white;
     box-shadow: inset 4px 4px 0px rgba(0,0,0,0.1);
@@ -474,6 +554,7 @@ button {
     border: 4px solid var(--text-dark);
     background: #000;
 }
+
 #scratch-canvas {
     position: absolute;
     top: 0;
@@ -483,6 +564,7 @@ button {
     z-index: 2;
     cursor: crosshair;
 }
+
 .scratch-reveal {
     position: absolute;
     top: 0;
@@ -497,6 +579,7 @@ button {
 .shake {
     animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 }
+
 @keyframes shake {
     10%, 90% { transform: translate3d(-4px, 0, 0); }
     20%, 80% { transform: translate3d(4px, 0, 0); }
@@ -505,7 +588,7 @@ button {
 }
 
 /* =========================================================================
-   FINALE GALLERY - Polaroid photos in normal page flow
+   FINALE GALLERY
    ========================================================================= */
 .finale-gallery {
     display: none;
@@ -523,7 +606,7 @@ button {
     height: 120px;
     object-fit: cover;
     border: 4px solid white;
-    box-shadow: 
+    box-shadow:
         -2px 0 0 0 var(--text-dark),
         2px 0 0 0 var(--text-dark),
         0 -2px 0 0 var(--text-dark),
@@ -547,21 +630,20 @@ button {
 }
 
 /* =========================================================================
-   Polaroid Pixel Style
+   Polaroid Base Style
    ========================================================================= */
 .polaroid-pixel {
     background: #fff;
     padding: 8px 8px 24px 8px;
-    box-shadow: 
+    box-shadow:
         0 4px 0 rgba(0,0,0,0.3),
         4px 0 0 rgba(0,0,0,0.3),
         -4px 0 0 rgba(0,0,0,0.3),
         0 -4px 0 rgba(0,0,0,0.3);
-    transform: translate(var(--off-x, 0), var(--off-y, 0)) rotate(var(--rot, 0deg));
-    transition: transform 0.3s ease, opacity 0.5s ease;
+    transition: transform 0.3s ease, opacity 0.5s ease, box-shadow 0.3s ease;
     width: 120px;
-    position: absolute;
-    opacity: 0.4; /* Dimmed for background effect */
+    position: relative;
+    opacity: 1;
 }
 
 .polaroid-pixel img {
@@ -574,24 +656,91 @@ button {
     border: 1px solid #ddd;
 }
 
-.polaroid-pixel:hover {
-    transform: scale(1.2) rotate(0deg) !important;
-    z-index: 100;
+/* =========================================================================
+   GRAND FINALE - CLEAN SCRAPBOOK LAYOUT
+   ========================================================================= */
+.finale-scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 520px;
+    max-height: 620px;
+    overflow: hidden;
 }
+
+.finale-centerpiece {
+    position: absolute;
+    left: 50%;
+    top: 54%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+}
+
+.finale-centerpiece .envelope-container {
+    width: 560px;
+    max-width: 56vw;
+    margin: 0;
+}
+
+.finale-actions {
+    position: relative;
+    z-index: 30;
+    margin-top: 8px;
+}
+
+.polaroid-final {
+    position: absolute;
+    width: 102px;
+    opacity: 0.97;
+    z-index: 12;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+    will-change: transform;
+}
+
+.polaroid-final img {
+    width: 100%;
+    height: 92px;
+    object-fit: cover;
+    display: block;
+    border: 1px solid #ddd;
+}
+
+.polaroid-final:hover {
+    transform: scale(1.08) rotate(0deg) !important;
+    z-index: 40;
+    opacity: 1;
+    box-shadow:
+        0 6px 0 rgba(0,0,0,0.30),
+        6px 0 0 rgba(0,0,0,0.30),
+        -6px 0 0 rgba(0,0,0,0.30),
+        0 -4px 0 rgba(0,0,0,0.20);
+}
+
+.tilt-left { transform: rotate(-8deg); }
+.tilt-right { transform: rotate(8deg); }
+.tilt-left-soft { transform: rotate(-4deg); }
+.tilt-right-soft { transform: rotate(4deg); }
+
+.p1 { left: 8%;  top: 6%; }
+.p2 { left: 10%; top: 33%; }
+.p3 { left: 14%; top: 61%; }
+
+.p4 { right: 8%;  top: 5%; }
+.p5 { right: 10%; top: 31%; }
+.p6 { right: 13%; top: 59%; }
 
 /* =========================================================================
    Animated Envelope & Letter
    ========================================================================= */
 .envelope-container {
     perspective: 1200px;
-    margin: 30px auto 20px auto;
     width: 90%;
-    max-width: 600px;
+    max-width: 560px;
     position: relative;
     cursor: pointer;
     z-index: 50;
-    /* Height adapts: closed = 300px, open = taller via wrapper */
     height: 300px;
+    overflow: visible;
 }
 
 .envelope-wrapper {
@@ -607,15 +756,15 @@ button {
     bottom: 0;
     width: 100%;
     height: 100%;
-    background: #e3c49e; 
-    box-shadow: 
+    background: #e3c49e;
+    box-shadow:
         0 4px 0 0 #332111,
         4px 0 0 0 #332111,
         -4px 0 0 0 #332111,
         0 -4px 0 0 #332111;
     z-index: 10;
     transform-style: preserve-3d;
-    background-image: 
+    background-image:
         linear-gradient(45deg, rgba(0,0,0,0.05) 50%, transparent 50%),
         linear-gradient(-45deg, rgba(0,0,0,0.05) 50%, transparent 50%);
     background-size: 100% 100%;
@@ -634,7 +783,7 @@ button {
     border-left-color: transparent;
     border-right-color: transparent;
     border-top: 151px solid #f5e0c5;
-    z-index: 20; 
+    z-index: 20;
     transform-origin: top center;
     transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.3s step-end;
     filter: drop-shadow(0 4px 0 #332111);
@@ -642,76 +791,59 @@ button {
 
 @media (min-width: 600px) {
     .envelope-flap {
-        border-left-width: 300px;
-        border-right-width: 300px;
+        border-left-width: 280px;
+        border-right-width: 280px;
     }
 }
 
 .envelope-wrapper.open .envelope-flap {
     transform: rotateX(180deg) translateY(4px);
     z-index: 1;
-    border-top-color: #d2b48c; 
+    border-top-color: #d2b48c;
 }
 
 .letter {
-    position: absolute;
-    bottom: 2px;
-    left: 5%;
-    width: 90%;
+    position: fixed;
+    top: calc(50% + 35px);
+    left: 50%;
+    width: min(90vw, 550px);
+    min-height: 320px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
     background: #ffffff;
-    box-shadow: 
+    box-shadow:
         0 4px 0 #332111,
         4px 0 0 #332111,
         -4px 0 0 #332111,
         0 -4px 0 #332111;
     padding: 30px;
     z-index: 5;
-    opacity: 0;
-    transform: translateY(0) scale(0.9);
-    transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1) 0.8s,
-                opacity 0.5s ease 0.8s,
-                z-index 0s linear 0.8s;
+    transform: translate(-50%, -20%) scale(0.85);
+    transform-origin: center center;
+    transition:
+        transform 0.7s cubic-bezier(0.19, 1, 0.22, 1),
+        opacity 0.4s ease,
+        visibility 0s linear 0.4s;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
 }
 
-/* *** LETTERA APERTA — sale esattamente della sua altezza *** */
 .envelope-wrapper.open .letter {
     opacity: 1;
-    /* Recalibrated to rest in the center of the viewport relative to the envelope position */
+    visibility: visible;
     transform: translate(-50%, -50%) scale(1);
     z-index: 1000;
-    height: auto;
-    min-height: 400px;
-    max-height: 85vh;
-    overflow-y: auto;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    bottom: auto; /* Important: Clear the initial bottom: 2px */
-    width: 90%;
-    max-width: 550px;
-    margin: 0;
-    
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.5s, 
-                opacity 0.6s ease 0.5s, 
-                z-index 0s linear 0.5s;
     pointer-events: auto;
-}
-
-@media (min-width: 600px) {
-    .envelope-wrapper.open .letter {
-        width: 550px;
-        margin-left: 0;
-        left: 50%;
-    }
+    transition:
+        transform 0.7s cubic-bezier(0.19, 1, 0.22, 1) 0.15s,
+        opacity 0.4s ease 0.15s,
+        visibility 0s linear 0s;
 }
 
 .wax-seal {
@@ -730,7 +862,7 @@ button {
     color: white;
     cursor: pointer;
     z-index: 100;
-    box-shadow: 
+    box-shadow:
         0 4px 8px rgba(0,0,0,0.3),
         inset 0 0 10px rgba(0,0,0,0.5);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -760,7 +892,10 @@ button {
 .pixelated-bg::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: inherit;
     filter: blur(1px) contrast(1.2);
     z-index: -1;
@@ -779,7 +914,7 @@ button {
     background: #e63946;
     margin-bottom: 25px;
     position: relative;
-    box-shadow: 
+    box-shadow:
         10px 0 0 #e63946, 30px 0 0 #e63946, 40px 0 0 #e63946,
         0 10px 0 #e63946, 10px 10px 0 #e63946, 20px 10px 0 #e63946, 30px 10px 0 #e63946, 40px 10px 0 #e63946, 50px 10px 0 #e63946,
         0 20px 0 #e63946, 10px 20px 0 #e63946, 20px 20px 0 #e63946, 30px 20px 0 #e63946, 40px 20px 0 #e63946, 50px 20px 0 #e63946,
@@ -791,8 +926,10 @@ button {
 .pixel-heart-deco::before {
     content: '';
     position: absolute;
-    top: -10px; left: -20px;
-    width: 10px; height: 10px;
+    top: -10px;
+    left: -20px;
+    width: 10px;
+    height: 10px;
     background: #e63946;
     box-shadow: 40px 0 0 #e63946;
 }
@@ -823,24 +960,6 @@ button {
     font-family: 'VT323', monospace;
 }
 
-@keyframes shake {
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(3px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(1px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
-}
-
-.shake {
-    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
-}
-
 @keyframes glitch {
     0% { text-shadow: 2px 0 red, -2px 0 blue; transform: translate(0); }
     20% { text-shadow: -2px 0 red, 2px 0 blue; transform: translate(-2px); }
@@ -862,32 +981,10 @@ button {
     text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .landing-title { font-size: 28px; }
-    h1, h2 { font-size: 16px; }
-    .countdown-unit { min-width: 70px; padding: 10px; }
-    .countdown-number { font-size: 24px; }
-    .countdown-text { font-size: 18px; }
-    
-    .polaroid-pixel {
-        max-width: 100px;
-        padding: 5px 5px 20px 5px;
-    }
-    .polaroid-pixel img {
-        width: 100%;
-        height: auto;
-    }
-
-    .envelope-wrapper.open .letter {
-        transform: translate(-50%, -50%) scale(0.95);
-    }
-}
-
 /* Music Player */
 .music-player {
     position: fixed;
-    top: 20px;
+    top: 10px;
     right: 20px;
     background: var(--bg-dark);
     padding: 8px 12px;
@@ -895,9 +992,10 @@ button {
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    z-index: 1000;
+    z-index: 10000;
     width: 200px;
 }
+
 .marquee-container {
     width: 100%;
     overflow: hidden;
@@ -905,6 +1003,7 @@ button {
     padding: 4px;
     border: 2px solid var(--accent-gold);
 }
+
 .track-name {
     font-family: 'Press Start 2P', monospace;
     color: #FFD1DC;
@@ -913,25 +1012,29 @@ button {
     white-space: nowrap;
     text-shadow: 1px 1px 0 #000;
 }
+
 .music-controls {
     display: flex;
     gap: 15px;
 }
+
 .btn-pixel-small {
     font-family: 'Press Start 2P', monospace;
     background: var(--primary-rose);
     color: white;
-    border: 3px solid var(--primary-pink);
+    border: 3px solid var(--primary-rose);
     padding: 5px;
     font-size: 14px;
     cursor: pointer;
-    box-shadow: 
+    box-shadow:
         -2px 0 0 0 var(--text-dark),
         2px 0 0 0 var(--text-dark),
         0 -2px 0 0 var(--text-dark),
         0 2px 0 0 var(--text-dark);
 }
-.btn-pixel-small:hover, .btn-pixel-small:active {
+
+.btn-pixel-small:hover,
+.btn-pixel-small:active {
     transform: translateY(2px);
 }
 
@@ -982,4 +1085,197 @@ button {
 .admin-buttons button:hover {
     background: var(--primary-rose);
     border-color: #fff;
+}
+
+/* =========================================================================
+   Responsive adjustments
+   ========================================================================= */
+@media (min-width: 1400px) {
+    .polaroid-final {
+        width: 112px;
+    }
+
+    .polaroid-final img {
+        height: 100px;
+    }
+
+    .p1 { left: 10%; }
+    .p2 { left: 12%; }
+    .p3 { left: 15%; }
+
+    .p4 { right: 10%; }
+    .p5 { right: 12%; }
+    .p6 { right: 15%; }
+}
+
+@media (max-width: 1024px) {
+    #stage-6 {
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .finale-content {
+        height: auto;
+        min-height: calc(100vh - 80px);
+        grid-template-rows: auto auto auto;
+        overflow: visible;
+    }
+
+    .finale-scene {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        align-items: center;
+        min-height: auto;
+        max-height: none;
+        gap: 18px;
+        overflow: visible;
+    }
+
+    .finale-centerpiece {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        order: 2;
+    }
+
+    .finale-centerpiece .envelope-container {
+        width: 100%;
+        max-width: 540px;
+    }
+
+    .polaroid-final {
+        position: relative;
+        width: 94px;
+    }
+
+    .polaroid-final img {
+        height: 84px;
+    }
+
+    .p1, .p2, .p3, .p4, .p5, .p6 {
+        left: auto;
+        right: auto;
+        top: auto;
+        bottom: auto;
+    }
+
+    .finale-scene > .polaroid-final {
+        margin: 0 6px;
+    }
+
+    .finale-scene {
+        padding-top: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .landing-title { font-size: 28px; }
+    h1, h2 { font-size: 16px; }
+    .countdown-unit { min-width: 70px; padding: 10px; }
+    .countdown-number { font-size: 24px; }
+    .countdown-text { font-size: 18px; }
+
+    .quiz-options { grid-template-columns: 1fr; }
+
+    #stage-6 {
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .finale-content {
+        height: auto;
+        min-height: calc(100vh - 80px);
+        padding: 10px 12px 20px;
+        overflow: visible;
+    }
+
+    .finale-title {
+        font-size: 22px !important;
+    }
+
+    .finale-subtitle {
+        font-size: 18px;
+    }
+
+    .finale-scene {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(78px, 90px));
+        justify-content: center;
+        gap: 12px 14px;
+        min-height: auto;
+        max-height: none;
+        padding-top: 8px;
+        overflow: visible;
+    }
+
+    .finale-centerpiece {
+        grid-column: 1 / -1;
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        order: 3;
+    }
+
+    .finale-centerpiece .envelope-container,
+    .envelope-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .polaroid-final {
+        position: relative;
+        width: 82px;
+    }
+
+    .polaroid-final img {
+        height: 74px;
+    }
+
+    .polaroid-pixel {
+        max-width: 100px;
+        padding: 5px 5px 20px 5px;
+    }
+
+    .polaroid-pixel img {
+        width: 100%;
+        height: auto;
+    }
+
+    .p1, .p2, .p3, .p4, .p5, .p6 {
+        left: auto;
+        right: auto;
+        top: auto;
+        bottom: auto;
+    }
+
+    .envelope-wrapper.open .letter {
+        width: min(92vw, 420px);
+        max-height: calc(100vh - 120px);
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+
+    .polaroid-final:hover {
+        transform: scale(1.03) rotate(0deg) !important;
+    }
+
+    .music-player {
+        top: 10px;
+        right: 10px;
+        width: 130px;
+        padding: 5px;
+        z-index: 10000;
+    }
+
+    .track-name {
+        font-size: 8px;
+    }
+
+    .btn-pixel-small {
+        font-size: 12px;
+        padding: 3px;
+    }
 }
