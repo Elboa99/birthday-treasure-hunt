@@ -1,0 +1,9 @@
+.vercel
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.tmp
+.env
+credentials.json
+token.json
+node_modules
