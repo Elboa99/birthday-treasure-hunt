@@ -1,0 +1,8 @@
+{
+  "name": "birthday-treasure-hunt",
+  "version": 2,
+  "public": true,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
+}
